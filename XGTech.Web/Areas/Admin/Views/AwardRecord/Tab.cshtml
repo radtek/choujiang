@@ -1,0 +1,72 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>中奖</title>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">中奖记录</li>
+            <li>中奖统计</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <iframe scrolling="yes" id="main1" name="main" frameborder="0" src="/Admin/AwardRecord/" style="width:100%;"></iframe>
+            </div>
+            <div class="layui-tab-item">
+                <iframe scrolling="yes" id="main2" name="main" frameborder="0" src="/Admin/AwardStat/" style="width:100%;"></iframe>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+<script src="~/layui/layui.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    layui.use('element', function () {
+        var $ = layui.jquery
+            , element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+    });
+
+
+    // 计算页面的实际高度，iframe自适应会用到
+    function calcPageHeight(doc) {
+        var cHeight = Math.max(doc.body.clientHeight, doc.documentElement.clientHeight);
+        var sHeight = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
+        var height = Math.max(cHeight, sHeight);
+        return height;
+    }
+
+
+    function iframeInit(id) {
+        //根据ID获取iframe对象
+        var ifr = document.getElementById(id);
+        ifr.onload = function () {
+            //解决打开高度太高的页面后再打开高度较小页面滚动条不收缩
+            ifr.style.height = '0px';
+            var iDoc = ifr.contentDocument || ifr.document;
+            var height = calcPageHeight(iDoc);
+            console.log(height);
+            if (height < 850) {
+                height = 850;
+            }
+            ifr.style.height = height + 'px';
+        };
+    }
+
+
+    $(function () {
+        iframeInit('main2');
+        iframeInit('main1');
+    });
+
+</script>

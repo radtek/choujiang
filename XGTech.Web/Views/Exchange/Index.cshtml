@@ -1,0 +1,292 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>兑换奖品</title>
+    <script src="@Url.ContentVersioned("~/Turn/js/jquery.min.js")"></script>
+    <script src="@Url.ContentVersioned("~/layer_mobile/layer.js")"></script>
+    <script>
+        $(document).ready(function () {
+            //确认按钮
+            $("#quren").click(function () {
+                //底部对话框
+                var recipients = $("#recipients").val();
+                var phone = $("#phone").val();
+                var province = $("#province").val();
+                var city = $("#city").val();
+                var county = $("#county").val();
+                var address = $("#address").val();
+                var id = $('#id').val();
+                if (recipients == "")
+                    return showmsg("收件人不能为空", "recipients");
+                if (phone == "")
+                    return showmsg("请输入手机号", "phone");
+                if (phone.length != 11)
+                    return showmsg("手机号格式不正确", "phone");
+                if (province == "0")
+                    return showmsg("请选择 省", "province");
+                if (city == "0")
+                    return showmsg("请选择 市", "city");
+                if (address == "")
+                    return showmsg("详细地址不能为空", "address");
+                var pm = {
+                    recipients: recipients,
+                    phone: phone,
+                    province: province,
+                    city: city,
+                    county: county,
+                    address: address,
+                    id: id
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Exchange/PostExchange",
+                    async: false,
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    data: pm,
+                    success: function (result) {
+                        if (result == "ok") {
+                            successmsg();
+                        }
+                    },
+                    error: function (error) {
+                        alert("出错：" + error.responseText);
+                    }
+                });
+            });
+
+            //取消按钮
+            $("#quexiao").click(function () {
+                $("#recipients").val("");
+                $("#phone").val("");
+                getArea("province", 0);
+                $("#city").html("");
+                $("#county").html("");
+                $("#address").val("");
+                $("#recipients").focus();
+            });
+
+            getArea("province", 0);
+
+            $('#province').change(function () {
+                if (this.value == "0") {
+                    $("#city").html("<option value=\"-1\">请选择</option>");
+                    $("#county").html("<option value=\"-1\">请选择</option>");
+                } else {
+                    getArea("city", this.value);
+                }
+            });
+
+            $('#city').change(function () {
+                getArea("county", this.value);
+            });
+        });
+
+        function successmsg() {
+            layer.open({
+                title: ['兑换成功！',
+                    'background-color:#8DCE16; color:#fff;'
+                ],
+                btn: ['确认'],
+                shadeClose: false
+                , anim: 'up'
+                , content: '兑换成功,客服将在3天内安排发货',
+                yes: function () {
+                    window.location.href = "/MyPrize/Index";
+                }
+            });
+        }
+        function showmsg(msg, obj) {
+            var index = layer.open({
+                content: msg
+                , btn: ['确认']
+                , skin: 'footer'
+                , yes: function () {
+                    layer.close(index);
+                    $("#" + obj).focus();
+                }
+            });
+        }
+
+        function getArea(flag, id) {
+            $.ajax({
+                type: "POST",
+                url: "/Exchange/GetArea",
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                data: "id=" + id,
+                async: false,
+                success: function (result) {
+                    var html = "<option value=\"-1\">请选择</option>";
+                    $.each(result, function (i, j) {
+                        html += "<option value=" + j.Id + " >" + j.Name + "</option>";
+                    });
+                    if (flag == "province") {
+                        $("#province").html(html);
+                    } else if (flag == "city") {
+                        $("#city").html(html);
+                        $("#county").html("<option value=\"-1\">请选择</option>");
+                    } else {
+                        if (html == "<option value=\"-1\">请选择</option>") {
+                            $("#county").html("<option value=\"-1\">请选择</option>");
+                        } else {
+                            $("#county").html(html);
+                        }
+                    }
+
+                },
+                error: function (error) {
+                    showmsg("出错：" + error.responseText, "recipients");
+                }
+            });
+
+
+        }
+
+
+        function checkvalue(o) {
+            o.value = o.value.replace(/[^\d]/g, '');
+        }
+    </script>
+    <style>
+        body {
+            font-size: 12px;
+        }
+
+        input {
+            border: 1px solid #ccc;
+            margin-left: 10px;
+            height: 25px;
+            width: 82%
+        }
+
+        .right {
+            height: 40px;
+            width: 17%;
+            text-align: right;
+        }
+
+        .left {
+            width: 82%;
+            text-align: right;
+        }
+
+        select {
+            border: 1px solid #ccc;
+            margin-left: 10px;
+            height: 28px;
+            width: 84%
+        }
+
+        textarea {
+            border: 1px solid #ccc;
+            margin-left: 10px;
+            height: 40px;
+            width: 82%
+        }
+
+        table {
+            margin-top: 10px;
+            width: 100%
+        }
+
+        .css-3d-btn {
+            margin-top: 15px;
+            border: 0px solid #ccc;
+            color: rgba(255, 255, 255, 1);
+            height: 27px;
+            background-color: rgb(255, 106, 0);
+            font-family: "Microsoft YaHei", 微软雅黑, 宋体;
+            font-size: 1em;
+            padding: 2px;
+            box-shadow: 0px 2px 0px rgba(255, 106, 0), 0px 2px 5px rgba(0, 0, 0, .7);
+            width: 100px;
+            -webkit-transition: all .1s ease;
+            -moz-transition: all .1s ease;
+            transition: all .1s ease;
+        }
+
+
+        .css-3d-btn1 {
+            margin-top: 15px;
+            margin-left: 10px;
+            border: 0px solid #ccc;
+            color: rgba(255, 255, 255, 1);
+            height: 27px;
+            background-color: #ccc;
+            font-family: "Microsoft YaHei", 微软雅黑, 宋体;
+            font-size: 1em;
+            padding: 2px;
+            box-shadow: 0px 2px 0px #ccc, 0px 2px 5px rgba(0, 0, 0, .7);
+            width: 100px;
+            -webkit-transition: all .1s ease;
+            -moz-transition: all .1s ease;
+            transition: all .1s ease;
+        }
+    </style>
+
+</head>
+<body>
+    <form>
+        <div style=" height:32px; width:100%; border-bottom: 1px solid #aaa;">
+            <div><img src="~/images/51106.gif" style="height:25px; float:left; " /> </div>
+            <div style="line-height:30px; height:32px; margin-bottom:15px;float:left; margin-left:10px; ">
+                兑换奖品
+            </div>
+        </div>
+        <img src="@Url.ContentVersioned("~/images/dj-bg_1.png")" style="width:100%;" />
+        <div style=" width:100%; text-align:center;   color:#ccc; letter-spacing:2px;">
+            请留下信息， 兑奖后，客服将在3天内安排发货
+        </div>
+        <table>
+            <tr>
+                <td class="right">收件人</td>
+                <td><input type="text" name="recipients" maxlength="20" id="recipients" /></td>
+            </tr>
+            <tr>
+                <td class="right">手机</td>
+                <td><input type="text" onkeyup='checkvalue(this);' maxlength="11" name="phone" id="phone" /></td>
+            </tr>
+            <tr>
+                <td class="right">省</td>
+                <td>
+                    <select id="province" name="province"></select>
+                </td>
+            </tr>
+            <tr>
+                <td class="right">市</td>
+                <td>
+                    <select id="city" name="city"></select>
+                </td>
+            </tr>
+            <tr id="countyShow" >
+                <td class="right">区</td>
+                <td>
+                    <select id="county" name="county"></select>
+                </td>
+            </tr>
+            <tr>
+                <td class="right">详细地址</td>
+                <td>
+                    <textarea name="address" id="address"></textarea>
+                </td>
+            </tr>
+
+            <tr style=" text-align:center;">
+                <td colspan="2">
+                    <input type="hidden" id="id" name="id" value="@ViewBag.ID" />
+                    <input type="button" id="quren" value="确认兑换" class="css-3d-btn" />
+                    <input type="button" id="quexiao" value="取 消" class="css-3d-btn1" />
+                </td>
+            </tr>
+        </table>
+
+    </form>
+</body>
+</html>

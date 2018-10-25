@@ -1,0 +1,518 @@
+﻿@using XGTech.Model.Model.ViewModel
+@{
+    Layout = null;
+
+    List<LeftMenuDTO> leftMenuList = ViewBag.MenuList as List<LeftMenuDTO>;
+
+    var MenuGroupList = leftMenuList.GroupBy(m => m.group_name).Select(g => g.First()).ToList();
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>抽奖信息管理</title>
+    <meta name="description" content="抽奖信息管理" />
+    <meta name="keywords" content="抽奖信息管理" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <!-- load css -->
+    <link rel="stylesheet" type="text/css" href="~/Css/bootstrap.min.css" media="all">
+    <link rel="stylesheet" type="text/css" href="~/Css/font/iconfont.css" media="all">
+    <link rel="stylesheet" type="text/css" href="~/Css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="~/Css/jqadmin.css" media="all">
+    <style type="text/css">
+
+        #closealltab {
+            position: absolute;
+            display: inline-block;
+            z-index: 9999;
+            right: 0px;
+            top: 12px;
+        }
+
+        .header .jqadmin-logo-box {
+            display: block;
+            position: absolute;
+            left: 5px;
+            width: 210px;
+            top: -8px;
+        }
+
+        em {
+            font-style: inherit !important;
+        }
+
+        .layui-layout-admin .layui-header {
+            background-color: #17a9a8 !important;
+        }
+
+        .header {
+            border-bottom: none !important;
+        }
+
+            .header .jqadmin-logo-box {
+                left: 0px !important;
+                top: 0px !important;
+                background-color: #22b7b5 !important;
+                height: 60px !important;
+            }
+
+        .layui-nav .layui-nav-item a {
+            color: #fff !important;
+        }
+
+        .layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 5px;
+            background-color: #17a9a8;
+            transition: all .2s;
+            -webkit-transition: all .2s;
+        }
+
+        .jqadmin-main-menu .layui-this {
+            background-color: #12a09f !important;
+            height: 60px !important;
+        }
+
+        .header .header-right .right-menu {
+            right: 0px;
+            width: 105px !important;
+        }
+
+        .header-right dl a {
+            background-color: #17a9a8 !important
+        }
+
+            .header-right dl a:hover {
+                background-color: #17a9a8 !important
+            }
+
+        .layui-nav-itemed > a, .layui-nav-tree .layui-nav-title a, .layui-nav-tree .layui-nav-title a:hover {
+            background-color: #2b2a3c !important;
+            color: #fff !important;
+        }
+
+        .layui-nav-child a span {
+            color: #6e6f84 !important;
+        }
+
+        .layui-nav-child a i {
+            color: #6e6f84 !important;
+        }
+
+        .sub-menu .layui-nav-item dl dd:hover {
+            background: #333244 !important;
+        }
+
+            .sub-menu .layui-nav-item dl dd:hover a span {
+                color: #17ab92 !important;
+            }
+
+            .sub-menu .layui-nav-item dl dd:hover a i {
+                color: #17ab92 !important;
+            }
+
+        .layui-nav-child {
+            background: #333244 !important;
+        }
+
+        .layui-layout-admin .jqamdin-left-bar {
+            top: 60px;
+            background: #333244 !important;
+        }
+
+        .layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-this, .layui-nav-tree .layui-this > a, .layui-nav-tree .layui-this > a:hover {
+            background-color: #333244 !important;
+        }
+
+
+
+        .layui-nav-child dd.layui-this {
+            background-color: #333244 !important;
+        }
+
+            .layui-nav-child dd.layui-this span {
+                color: #17ab92 !important;
+            }
+
+            .layui-nav-child dd.layui-this i {
+                /*color: #17ab92 !important;*/
+            }
+
+        .layui-nav-tree .layui-nav-bar {
+            width: 2px !important;
+            background-color: #17ab92 !important;
+        }
+    </style>
+</head>
+<body style="min-width:1000px !important">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header header">
+            <!-- logo区域 -->
+            <div class="jqadmin-logo-box">
+                <a class="logo" href="#" title="抽奖信息管理系统"><img src="/images/logo-xzc.png" style="width:100%;margin-top: -5px;" alt="抽奖信息管理系统"></a>
+            </div>
+            <!-- 主菜单区域 -->
+            <div class="jqadmin-main-menu">
+                @* <ul class="layui-nav clearfix" lay-filter="main-menu">
+                                 <li class="layui-nav-item layui-this">
+                        <a href="javascript:;"><i class="iconfont">&#xe637; </i>基础资料</a>
+                    </li>
+                    <li class="layui-nav-item">
+                            <a href="javascript:;"><i class="layui-icon">&#xe614; </i>系统设置</a>
+                        </li>
+                                <li class="layui-nav-item">
+                                    <a href="javascript:;"><i class="iconfont ">&#xe672; </i>物资管理</a>
+                                </li>*@
+                </ul>
+            </div>
+            <!-- 头部右侧导航 -->
+            <div class="header-right">
+                <ul class="layui-nav jqadmin-header-item right-menu">
+                    <li class="layui-nav-item first" style="border-left:1px solid #1bb7b6">
+                        <a href="javascript:;">
+                            <cite> <i class="iconfont " data-icon='&#xe672;'>&#xe672; </i>@ViewData["UserName"]</cite>
+                            <span class="layui-nav-more"></span>
+                        </a>
+                        <dl class="layui-nav-child" style="background-color: #17a9a8 !important">
+                            <dd>
+                                <a href="javascript:void(0);" id="modifyPwd"><i class="layui-icon layui-icon-password"> </i>修改密码</a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:void(0)" id="logout"><i class="iconfont ">&#xe64b; </i>退出</a>
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 左侧导航-->
+        <div class="layui-side jqamdin-left-bar">
+            <!--子菜单项-->
+            @*<p class="jqadmin-home tab-menu" style="height:28px; background-color:#333244">
+                </p>*@
+            <div class="sub-menu">
+                <!--基础资料-->
+                <ul class="layui-nav layui-nav-tree">
+                    @* <li class="layui-nav-item layui-nav-itemed" data-bind="">
+                            <a href="javascript:;" data-title="基础资料">
+                                <i class="iconfont">&#xe637;</i>
+                                <span>基础资料</span>
+                                <em class="layui-nav-more"></em>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd>
+                                    <a href="javascript:;" data-url="/Supplier/index" data-title="供应商信息">
+                                        <i class="layui-icon" data-icon='&#xe647;'>&#xe632;</i>
+                                        <span>供应商信息</span>
+                                    </a>
+                                </dd>
+                            </dl>
+                        </li>*@
+
+                    @foreach (var item in MenuGroupList)
+                    {
+                        <li class="layui-nav-item layui-nav-itemed" data-bind="">
+                            <a href="javascript:;" data-title="@item.group_name">
+                                <i class="iconfont">&#xe637;</i>
+                                <span>@item.group_name</span>
+                                <em class="layui-nav-more"></em>
+                            </a>
+
+                            @foreach (var item2 in leftMenuList.Where(m => m.group_name == item.group_name))
+                            {
+                                <dl class="layui-nav-child">
+                                    <dd>
+                                        <a href="javascript:;" data-url="@item2.url_absolute_path" data-title="@item2.menu_name">
+                                            <i class="layui-icon" data-icon='&#xe647;'>&#xe632;</i>
+                                            <span>@item2.menu_name</span>
+                                        </a>
+                                    </dd>
+                                </dl>
+
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+            @*<div class="sub-menu">
+                    <ul class="layui-nav layui-nav-tree">
+                        <li class="layui-nav-item layui-nav-itemed">
+                            <a href="javascript:;" data-title="系统设置">
+                                <i class="iconfont">&#xe672;</i>
+                                <span>系统设置</span>
+                                <em class="layui-nav-more"></em>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd>
+                                    <a href="javascript:;" data-url="/User/RoleManager" data-title="权限管理">
+                                        <i class="iconfont" data-icon='&#xe647;'>&#xe630;</i>
+                                        <span>权限管理</span>
+                                    </a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" data-url="/User/UpdatePassWord" data-title="修改密码">
+                                        <i class="iconfont" data-icon='&#xe647;'>&#xe60f;</i>
+                                        <span>修改密码</span>
+                                    </a>
+                                </dd>
+                            </dl>
+                        </li>
+                    </ul>
+                </div>*@
+
+            @*<div class="sub-menu">
+                    <ul class="layui-nav layui-nav-tree">
+                        <li class="layui-nav-item">
+                            <a href="javascript:;">物资管理</a>
+                            <dl class="layui-nav-child">
+                                <dd>
+                                    <a href="javascript:;" data-url="/Material/Purchase" data-title="物资申购">
+                                        <i class="iconfont" data-icon='&#xe630;'>&#xe630;</i>
+                                        <span>物资申购</span>
+                                    </a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" data-url="/AssetsManager/AssetNewRK" data-title="物资入库">
+                                        <i class="iconfont" data-icon='&#xe647;'>&#xe630;</i>
+                                        <span>物资入库</span>
+                                    </a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" data-url="/AssetsManager/AssetsNewLY" data-title="通装出库">
+                                        <i class="iconfont" data-icon='&#xe647;'>&#xe60f;</i>
+                                        <span>通装出库</span>
+                                    </a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" data-url="/AssetsManager/AssetsZZNewLY" data-title="专装出库">
+                                        <i class="iconfont" data-icon='&#xe647;'>&#xe60f;</i>
+                                        <span>专装出库</span>
+                                    </a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" data-url="/AssetsManager/AssetsNewZY" data-title="物资转移">
+                                        <i class="iconfont " data-icon='&#xe647;'>&#xe74d;</i>
+                                        <span>物资转移</span>
+                                    </a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" data-url="/InventoryManagement/InventoryIndex" data-title="盘存查询">
+                                        <i class="iconfont" data-icon='&#xe647;'>&#xe74d;</i>
+                                        <span>盘存查询</span>
+                                    </a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" data-url="/InventoryManagement/Index" data-title="库存管理">
+                                        <i class="iconfont" data-icon='&#xe647;'>&#xe74d;</i>
+                                        <span>库存管理</span>
+                                    </a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" data-url="/AssetInventorySummary/Index" data-title="物资库存汇总查询">
+                                        <i class="iconfont" data-icon='&#xe630;'>&#xe630;</i>
+                                        <span>物资库存汇总查询</span>
+                                    </a>
+                                </dd>
+                                <dd>
+                                        <a href="javascript:;" data-url="/AssetRepair/index" data-title="物资维修">
+                                            <i class="iconfont " data-icon='&#xe647;'>&#xe74d;</i>
+                                            <span>物资维修</span>
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;" data-url="/OutOrder/Index" data-title="物资报废及处理">
+                                            <i class="iconfont" data-icon='&#xe647;'>&#xe74d;</i>
+                                            <span>物资报废及处理</span>
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;" data-url="/MonSubScription/index" data-title="采购申请">
+                                            <i class="iconfont " data-icon='&#xe647;'>&#xe74d;</i>
+                                            <span>采购申请</span>
+                                        </a>
+                                    </dd>
+                            </dl>
+                        </li>
+                        <li class="layui-nav-item">
+                            <a href="javascript:;">维修管理模块</a>
+                            <dl class="layui-nav-child">
+                                <dd>
+                                    <a href="javascript:;" data-url="/RepairOperation/Index" data-title="维修管理">
+                                        <i class="iconfont" data-icon='&#xe647;'>&#xe74d;</i>
+                                        <span>维修管理</span>
+                                    </a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" data-url="/RepairRepository/Index" data-title="维修知识库">
+                                        <i class="iconfont" data-icon='&#xe647;'>&#xe74d;</i>
+                                        <span>维修知识库</span>
+                                    </a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" data-url="/AssetsManager/WeiWaiWX" data-title="委外维修">
+                                        <i class="iconfont" data-icon='&#xe647;'>&#xe74d;</i>
+                                        <span>委外维修</span>
+                                    </a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" data-url="/AssetsManager/WeiWaiWXIsReturn" data-title="物资待归还表">
+                                        <i class="iconfont" data-icon='&#xe647;'>&#xe74d;</i>
+                                        <span>物资待归还表</span>
+                                    </a>
+                                </dd>
+                            </dl>
+                        </li>
+                        <li class="layui-nav-item">
+                            <a href="javascript:;">物资报表</a>
+                            <dl class="layui-nav-child">
+                                    <dd>
+                                        <a href="javascript:;" data-url="/MonSubScription/GetTj" data-title="采购统计">
+                                            <i class="iconfont " data-icon='&#xe647;'>&#xe74d;</i>
+                                            <span>采购统计</span>
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;" data-url="/MonthlySubscriptionContrast/Index" data-title="采购领用对比">
+                                            <i class="iconfont" data-icon='&#xe647;'>&#xe74d;</i>
+                                            <span>采购领用对比</span>
+                                        </a>
+                                    </dd>
+                                </dl>
+                        </li>
+                        <li class="layui-nav-item">
+                                            <a href="javascript:;">物资展示平台</a>
+                                            <dl class="layui-nav-child">
+                                                <dd>
+                                <a href="javascript:;" data-url="/AssetShowDirectory/Index" data-title="物资展示目录">
+                                    <i class="iconfont " data-icon='&#xe647;'>&#xe74d;</i>
+                                    <span>物资展示目录</span>
+                                </a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" data-url="/AssetsDisplay/Index" data-title="物资展示管理">
+                                    <i class="iconfont" data-icon='&#xe647;'>&#xe74d;</i>
+                                    <span>物资展示管理</span>
+                                </a>
+                            </dd>
+
+                                            </dl>
+                                        </li>
+                    </ul>
+                </div>*@
+        </div>
+        <!-- 左侧侧边导航结束 -->
+        <!-- 右侧主体内容 -->
+        <div class="layui-body jqadmin-body" id="jqadmin-body">
+            <div class="display-arrow">
+                <span class="arrow-box">
+                    <i class="iconfont">&#xe616;</i>
+                </span>
+            </div>
+            <div class="layui-tab layui-tab-card jqadmin-tab-box" id="jqadmin-tab" lay-filter="tabmenu" lay-allowclose="true" lay-notauto="true">
+                <ul class="layui-tab-title">
+                    <li class="layui-this" id="admin-home"><i class="iconfont">&#xe600;</i><em>首页</em></li>
+                </ul>
+                <div id="closealltab" class="layui-nav-item">
+                    <button title="关闭全部" class="layui-btn">
+                        <i class="iconfont">&#xe62e; </i>关闭全部
+                    </button>
+                </div>
+                <div class="tab-move-btn">
+                    <span class="move-left-btn"><i class="iconfont">&#xe616;</i></span>
+                    <span class="move-right-btn"><i class="iconfont ">&#xe618;</i></span>
+                </div>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <iframe class="jqadmin-iframe" data-id='0' src=""></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 底部区域 -->
+        <div class="layui-footer jqadmin-foot" id="jqadmin-footer">
+            <div class="layui-mian">
+                <span>当前登录用户:</span><span style="margin-right: 150px;"><a>@ViewData["userName"]</a></span>
+                <span>当前登录时间:</span><span style="margin-right: 150px;"><a>@ViewData["nowtime"]</a></span>
+                <span>当前版本:</span><span style="margin-right: 150px;"><a>1.0.0.0</a></span>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/layui/layui.js"></script>
+    <script type="text/javascript">
+        layui.config({
+            base: '/Scripts'
+        }).extend({
+            elem: '/jqmodules/elem',
+            tabmenu: '/jqmodules/tabmenu'
+        }).use('/index');
+
+        layui.use(['layer'], function () {
+            var layer = layui.layer
+            $("#logout").click(function () {
+                layer.msg('确定要退出吗？', {
+                    time: 0 //不自动关闭
+                    , btn: ['确认', '取消']
+                    , yes: function (index) {
+                        layer.close(index);
+                        $.post('/admin/Home/LoginOut', {}, function (data) {
+                            if (data.code == 1) {
+                                location.href = data.data.url;
+                            } else {
+                                layer.msg(data.msg);
+                            }
+                        })
+                    }
+                });
+
+
+            })
+
+        });
+
+
+        $('#modifyPwd').click(function ()
+        {
+            layer.open({
+                title: '修改密码',
+                type: 2,
+                area: ['500px', '350px'],
+                fixed: false, //不固定
+                maxmin: true,
+                content: '/Admin/Home/ModifyPwdView'
+            });
+        });
+    </script>
+    <script>
+
+        $(document).ready(function () {
+            //关闭全部选项卡 logout
+            $("#closealltab").click(function () {
+                $(".layui-tab-close").click();
+            })
+        });
+
+        $(".jqadmin-main-menu .layui-nav-item").on("mouseover", function () {
+            $(this).css("background-color", "#12a09f");
+            $(this).css("height", "60px");
+        })
+        $(".jqadmin-main-menu .layui-nav-item").on("mouseout", function () {
+            $(this).css("background-color", "#17a9a8");
+            $(this).css("height", "60px");
+        })
+
+
+
+    </script>
+</body>
+</html>
+

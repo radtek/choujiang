@@ -1,0 +1,163 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>用户</title>
+    <link rel="stylesheet" type="text/css" href="@Url.ContentVersioned("~/layui/css/layui.css")">
+</head>
+<body>
+    <form class="layui-form" action="">
+        <div class="layui-row">
+            <div class="layui-col-md8">
+                <div style=" margin-top:30px; ">
+                    <div class="layui-form-item">
+                        <div class="layui-inline" style="margin-right:0px;">
+                            <label class="layui-form-label">员工信息：</label>
+                            <div class="layui-input-inline" style="width: 180px;">
+                                <input type="text" id="keyword" placeholder="根据员工名称、工号查询" autocomplete="off" class="layui-input" style="width: 180px;">
+                            </div>
+                        </div>
+                        <div class="layui-inline" style="margin-right:0px;">
+                            <input id="Seach" class="layui-btn" value="检索" type="button" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <table class="layui-table" lay-filter="activitytable" id="activitytable"></table>
+    <script type="text/html" id="toolbarBtn">
+        <div class="layui-btn-container " style="margin-left:10px;">
+            <input class="layui-btn layui-btn-sm" type="button" lay-event="add" id="add" style="width:60px;" value="新增" />
+            <input class="layui-btn layui-btn-sm" type="button" lay-event="edit" style=" width:60px;" value="编辑" />
+            <input class="layui-btn layui-btn-sm" type="button" lay-event="changepassword" style=" width:80px;" value="修改密码" />
+        </div>
+    </script>
+    <script type="text/javascript" src="@Url.ContentVersioned("~/layui/layui.js")"></script>
+    <script>
+    
+        layui.use(['table', 'laydate'], function () {
+            var table = layui.table;
+            var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start_time' //指定元素
+            });
+            laydate.render({
+                elem: '#end_time' //指定元素
+            });
+
+            TableOnLoad();
+
+            //加载表格
+            function TableOnLoad() {
+                var keyword = $("#keyword").val();
+
+                var pm = {
+                    keyword: keyword,
+                };
+                table.render({
+                    elem: '#activitytable'
+                    , url: '/Admin/User/GetUserList'
+                    , where: pm
+                    , title: "员工列表"
+                    , toolbar: '#toolbarBtn'
+                    , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    , cols: [[
+                        { type: 'checkbox', fixed: 'left' }
+                        , { type: 'numbers', title: '序号' }
+                        , { field: 'real_name', title: '员工名称' } //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                        , { field: 'emp_no', title: '员工工号' }
+                        , { field: 'telphone', title: '手机' }
+                        , { field: 'user_status', title: '状态', templet: '#StatusName' }
+                        , { field: 'create_time', title: '添加日期' } //单元格内容水平居中
+                        , { field: 'createName', title: '添加人', width: 150 }
+                        //, { field: 'Status', title: '资格来源', sort: true, align: 'right', templet: '#StatusName' }
+                    ]]
+                    , page: true
+                });
+
+            }
+
+            //头工具栏事件
+            table.on('toolbar(activitytable)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'add':
+                        parent.layer.open({
+                            title: "添加员工",
+                            type: 2,
+                            area: ['450px', "370px"],
+                            fixed: false, //不固定
+                            maxmin: true,
+                            content: '/admin/User/AddUser'
+                        });
+                        break;
+                    case 'edit':
+                        var data = checkStatus.data;
+                        if (data.length == 0)
+                            return layer.alert("请选择需要编辑的员工", { icon: 0 });
+                        if (data.length != 1)
+                            return layer.alert("只能选择一个员工进行编辑", { icon: 0 });
+                        parent.layer.open({
+                            title: "编辑员工",
+                            type: 2,
+                            area: ['450px', "370px"],
+                            fixed: false, //不固定
+                            maxmin: true,
+                            content: '/admin/User/EditUser?id=' + data[0].user_id
+                            , zIndex: layer.zIndex //重点1
+                            , success: function (layero) {
+                                layer.setTop(layero); //重点2
+                            }
+                        });
+                        break;
+                    case 'changepassword':
+                        var data = checkStatus.data;
+                        if (data.length == 0)
+                            return layer.alert("请选择需要修改密码的员工", { icon: 0 });
+                        if (data.length != 1)
+                            return layer.alert("只能选择一个员工进行修改", { icon: 0 });
+                        parent.layer.open({
+                            title: "修改密码",
+                            type: 2,
+                            area: ['450px', "250px"],
+                            fixed: false, //不固定
+                            maxmin: true,
+                            content: '/admin/User/EditPassWord?id=' + data[0].user_id
+                            , zIndex: layer.zIndex //重点1
+                            , success: function (layero) {
+                                layer.setTop(layero); //重点2
+                            }
+                        });
+
+                        break;
+                };
+            });
+
+           
+
+
+            $("#Seach").on("click", function () {
+                TableOnLoad();
+            });
+        });
+    </script>
+
+    <script type="text/html" id="StatusName">
+        {{# if(d.user_status==1){ }}
+        <font style="color:green;">启用</font>
+        {{# }  }}
+        {{# if(d.user_status==2){ }}
+        <font style="color:red;">停用</font>
+        {{# } }}
+    </script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>中奖汇总</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">开始日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="StartDate" name="StartDate" class="layui-input" placeholder="" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="EndDate" name="EndDate" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">活动标题</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="Title" name="Title" class="layui-input" />
+                    </div>
+                </div>
+                <button class="layui-btn" id="search" type="button" data-type="reload">搜索</button>
+            </div>
+        </div>
+    </div>
+    <div class="layui-btn-group demoTable">
+        <a class="layui-btn layui-btn-normal" id="export" style="margin-left:40px!important; margin-right:10px!important;">导出</a>
+    </div>
+    <table class="layui-hide" id="LAY_table_user" lay-filter="demo"></table>
+
+    <script type="text/html" id="barDemo">
+        @*<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>*@
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+    </script>
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/layui/layui.js"></script>
+    <script>
+
+    </script>
+    <script>
+
+
+        layui.use(['table','laydate'], function () {
+            var table = layui.table;
+            var laydate = layui.laydate;
+            //常规用法
+            laydate.render({
+                elem: '#StartDate'
+            });
+
+            laydate.render({
+                elem: '#EndDate'
+            });
+
+            //方法级渲染
+            table.render({
+                elem: '#LAY_table_user'
+                , url: '/Admin/AwardStat/List'
+                , cols: [[
+                    { checkbox: true, align: 'center', fixed: true }
+                    , { type: 'numbers', title: '序号' }
+                    , { field: 'ID', align: 'center', title: 'ID', width: 80, fixed: true, hide: true }
+                    , {
+                        field: 'StartDate', align: 'center', title: '开始日期',
+                        templet: function (d) {
+                            return new Date(d.StartDate).format("yyyy-MM-dd");
+                        }
+                    }
+                    ,{
+                        field: 'EndDate', align: 'center', title: '结束日期',
+                        templet: function (d) {
+                            return new Date(d.EndDate).format("yyyy-MM-dd");
+                        }
+                      }
+                    , { field: 'Number', align: 'center', title: '活动编号' }
+                    , { field: 'Title', align: 'center', title: '活动标题' }
+                    , { field: 'cjCount', align: 'center', title: '抽奖人数' }
+                    , { field: 'cjTime', align: 'center', title: '抽奖次数' }
+                    , { field: 'zjCount', align: 'center', title: '中奖人数' }
+                    , { field: 'djja', align: 'center', title: '奖品价值' }
+                    , { field: 'djcount', align: 'center', title: '兑奖人数' }
+                ]]
+                , id: 'testReload'
+                , page: true
+
+            });
+
+            var $ = layui.$;
+
+            $('#search').click(function () {
+                tblReload();
+            });
+
+
+            function tblReload() {
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        Title: $('#Title').val(),
+                        StartDate: $('#StartDate').val(),
+                        EndDate: $('#EndDate').val()
+                    }
+                });
+            }
+
+        });
+
+
+        $(function ()
+        {
+            $('#export').click(function (e)
+            {
+                var data = $('.layui-form').serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/PrizeSetting/Export",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    data: data,
+                    success: function (result) {
+                        if (result.code == 0) {
+                            window.location.href = result.url;
+                        } else {
+                            layer.alert("导出失败!");
+                        }
+                    },
+                    error: function (error) {
+                        alert("出错：" + error.responseText);
+                    }
+                });
+            });
+        });
+
+        Date.prototype.format = function (format) {
+            var args = {
+                "M+": this.getMonth() + 1,
+                "d+": this.getDate(),
+                "h+": this.getHours(),
+                "m+": this.getMinutes(),
+                "s+": this.getSeconds(),
+                "q+": Math.floor((this.getMonth() + 3) / 3),  //quarter
+                "S": this.getMilliseconds()
+            };
+            if (/(y+)/.test(format))
+                format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var i in args) {
+                var n = args[i];
+                if (new RegExp("(" + i + ")").test(format))
+                    format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+            }
+            return format;
+        };
+
+
+    </script>
+</body>
+</html>

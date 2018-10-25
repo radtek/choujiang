@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="renderer" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <!-- load css -->
+    <link rel="stylesheet" href="/Css/layui.css" media="all">
+    <link href="/Css/Material/material.css" rel="stylesheet" />
+    @RenderSection("css", required: true)
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>
+<script src="/Scripts/jquery-1.10.2.min.js"></script>
+<script src="/layui.js" charset="utf-8"></script>
+<script>
+    //产生随机数
+    var chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+    function generateMixed(n) {
+        var res = "";
+        for (var i = 0; i < n; i++) {
+            var id = Math.ceil(Math.random() * 35);
+            res += chars[id];
+        }
+        return res;
+    };
+</script>
+@RenderSection("script", required: true)

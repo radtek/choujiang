@@ -1,0 +1,126 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>发货</title>
+    <link href="~/layui/css/layui.css" rel="stylesheet" media="all" />
+    <style>
+        body {
+            margin: 7px;
+        }
+    </style>
+</head>
+<body>
+    <form class="layui-form">
+        <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">物流公司</label>
+            <div class="layui-input-block">
+                <select name="Express" lay-filter="aihao">
+                    @foreach (var item in ViewData["type"] as List<Tbl_Dict>)
+                    {
+                        if (ViewData["Express"] != null)
+                        {
+                            if ((Int64)ViewData["Express"] == item.DKey)
+                            {
+                                <option selected value="@item.DKey">@item.DValue</option>
+                            }else
+	                        {
+                                <option  value="@item.DKey">@item.DValue</option>
+	                        }
+                        }
+                        else
+                        {
+                            <option value="@item.DKey">@item.DValue</option>
+                        }
+
+
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">物流单号</label>
+            <div class="layui-input-block">
+                <input type="text" name="Billcode" placeholder="物流单号" autocomplete="off" class="layui-input" maxlength="30" lay-verify="required" value="@ViewData["BillCode"]" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" name="id" value="@ViewData["id"]" />
+                <button id="add" type="button" class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+                <button type="reset" id="reset" class="layui-btn layui-btn-primary">关闭</button>
+            </div>
+        </div>
+    </form>
+    <script src="~/layui/layui.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        layui.use(['form'], function () {
+            var form = layui.form;
+
+            form.on('submit(*)', function (data) {
+                console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+                console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+                console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                //var val = $(".layui-form").serialize();
+                //console.log(val);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/AwardRecord/Deliver",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    data: data.field,
+                    success: function (result) {
+                        if (result.code == 0) {
+                            parent.layer.closeAll();
+                            parent.$("#search").click();
+                        }
+                    },
+                    error: function (error) {
+                        alert("出错：" + error.responseText);
+                    }
+                });
+
+                //return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+
+        });
+
+        $(function () {
+
+            //$('#add').click(function () {
+            //    var data=$(".layui-form").serialize();
+
+            //    $.ajax({
+            //        type: "POST",
+            //        url: "/Admin/AwardRecord/Deliver",
+            //        contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+            //        data: data,
+            //        success: function (result) {
+            //            if (result.code == 0) {
+            //                parent.layer.closeAll();
+            //                parent.$("#search").click();
+            //            }
+            //        },
+            //        error: function (error) {
+            //            alert("出错：" + error.responseText);
+            //        }
+            //    });
+
+            //});
+
+            $('#reset').click(function ()
+            {
+                parent.layer.closeAll();
+            });
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>抽奖统计</title>
+    <link rel="stylesheet" type="text/css" href="@Url.ContentVersioned("~/layui/css/layui.css")">
+</head>
+<body>
+    <form class="layui-form" action="">
+        <div class="layui-row">
+            <div class="layui-col-md3">
+                <div style=" margin-top:30px;   ">
+                    <div class="layui-form-item" pane  style="display:none;">
+                        <label class="layui-form-label">时间类型</label>
+                        <div class="layui-input-block" style="width: 130px;">
+                            <select disabled>
+                                <option value="1">抽奖日期</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" pane>
+                        <label class="layui-form-label">开始时间</label>
+                        <div class="layui-input-block" style="width: 130px;">
+                            <input type="text" id="start_time" placeholder="" autocomplete="off" class="layui-input" style="width: 130px;">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" pane>
+                        <label class="layui-form-label">结束时间</label>
+                        <div class="layui-input-block" style="width: 130px;">
+                            <input type="text" id="end_time" placeholder="" autocomplete="off" class="layui-input" style="width: 130px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md8">
+                <div style=" margin-top:30px; ">
+                    <div class="layui-form-item">
+                        <div class="layui-inline" style="margin-right:0px;">
+                            <label class="layui-form-label">活动标题：</label>
+                            <div class="layui-input-inline" style="width: 120px;">
+                                <input type="text" id="title" placeholder="请输入" autocomplete="off" class="layui-input" style="width: 120px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input id="Seach" class="layui-btn" value="检索" type="button" />
+                        <input id="Ex" class="layui-btn layui-btn-primary" value="导出" type="button" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <table class="layui-table" lay-filter="activitytable" id="activitytable"></table>
+    <script type="text/javascript" src="@Url.ContentVersioned("~/layui/layui.js")"></script>
+    <script>
+        layui.use(['table', 'laydate'], function () {
+            var table = layui.table;
+            var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start_time' //指定元素
+            });
+            laydate.render({
+                elem: '#end_time' //指定元素
+            });
+
+            TableOnLoad();
+
+            //加载表格
+            function TableOnLoad() {
+                var title = $("#title").val();
+                var startTime = $("#start_time").val();
+                var endTime = $("#end_time").val();
+                var pm = {
+                    title: title,
+                    startTime: startTime,
+                    endTime: endTime,
+                };
+                table.render({
+                    elem: '#activitytable'
+                    , url: '/LotteryRecord/GetTotalList'
+                    , where: pm
+                    , title: "数据统计"
+                    , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    , cols: [[
+                          { field: 'number', title: '活动编号' }
+                        , { field: 'title', title: '活动标题' }
+                        , { field: 'username', title: '用户名' }
+                        , { field: 'lottery_count', title: '抽奖次数' }
+                        , { field: 'win_count', title: '中奖次数' }
+                        , { field: 'totalworth', title: '奖品价值' }
+                    ]]
+                    , page: true
+                });
+
+            }
+
+            //头工具栏事件
+            table.on('toolbar(activitytable)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'tongji':
+                        var data = checkStatus.data;
+                        break;
+                    case 'info':
+                        var data = checkStatus.data;
+                        break;
+                };
+            });
+
+            $("#Ex").on("click", function () {
+                var title = $("#title").val();
+                var startTime = $("#start_time").val();
+                var endTime = $("#end_time").val();
+                var pm = {
+                    title: title,
+                    startTime: startTime,
+                    endTime: endTime,
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/LotteryRecord/ExportTotalList",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    data: pm,
+                    success: function (result) {
+                        if (result.code == 0) {
+                            window.location.href = result.url;
+                        } else {
+                            layer.alert("暂无数据", { icon: 2 });
+                        }
+                    },
+                    error: function (error) {
+                        layer.alert("出错：" + error.responseText, { icon: 2 });
+                    }
+                });
+            });
+
+            $("#Seach").on("click", function () {
+                TableOnLoad();
+            });
+        });
+    </script>
+</body>
+
+
+</html>

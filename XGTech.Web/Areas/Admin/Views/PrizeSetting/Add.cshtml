@@ -1,0 +1,172 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui.form小例子</title>
+    <link href="~/layui/css/layui.css" rel="stylesheet" media="all" />
+    <style>
+        body {
+            margin: 7px;
+        }
+    </style>
+</head>
+<body>
+    <form class="layui-form">
+        <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖品名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="PName" placeholder="奖品名称" autocomplete="off" class="layui-input" lay-verify="required" maxlength="30">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖品类型</label>
+            <div class="layui-input-block">
+                <select name="PType" lay-filter="aihao" lay-verify="required">
+                    <option value="">请选择</option>
+                    @foreach (var item in ViewBag.PrizeTypeList as List<Tbl_Dict>)
+                    {
+                        <option value="@item.DKey">@item.DValue</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖品详情</label>
+            <div class="layui-input-block">
+                <input type="text" name="PDetails" placeholder="奖品详情" autocomplete="off" class="layui-input" lay-verify="required" maxlength="30" >
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖品图片</label>
+            <div class="layui-input-block">
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn" id="test1">上传图片</button>
+                    <div class="layui-upload-list">
+                        <img id="demo1" style="width:92px;height:92px;border:none;">
+                        <p id="demoText"></p>
+                        <input type="hidden" value="" name="PImg" id="PImg" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖品价值</label>
+            <div class="layui-input-block">
+                <input type="text" name="Pworth" placeholder="奖品价值" autocomplete="off" class="layui-input" value="0" lay-verify="Pworth">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">兑换规则(提示语)</label>
+            <div class="layui-input-block">
+                <textarea name="PRule" placeholder="兑换规则(提示语)" class="layui-textarea" maxlength="30" ></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id="add" type="button" class="layui-btn" lay-submit lay-filter="*">确定</button>
+                <button type="reset" id="cancel" class="layui-btn layui-btn-primary">取消</button>
+            </div>
+        </div>
+    </form>
+    <script src="~/layui/layui.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        layui.use(['form', 'upload'], function () {
+            var form = layui.form;
+
+            var $ = layui.jquery
+                , upload = layui.upload;
+
+            //普通图片上传
+            var uploadInst = upload.render({
+                elem: '#test1'
+                , url: '/Admin/Upload/UpLoadFile'
+                , before: function (obj) {
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function (index, file, result) {
+                        $('#demo1').attr('src', result); //图片链接（base64）
+                    });
+                }
+                , done: function (res) {
+                    //如果上传失败
+                    if (res.code == 1) {
+                        $('#PImg').val(res.datas[0].url);
+                        return layer.msg('上传成功!');
+                    } else {
+                        return layer.msg('上传失败!');
+                    }
+                    //上传成功
+                }
+                , error: function () {
+                    //演示失败状态，并实现重传
+                    var demoText = $('#demoText');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function () {
+                        uploadInst.upload();
+                    });
+                }
+            });
+
+
+            form.verify({
+                Pworth: function (value, item) { //value：表单的值、item：表单的DOM对象
+                    if (!(value >= 0 && value <= 999999)) {
+                        return "必须为0-999999之间!";
+                    }
+                }
+            });      
+
+            form.on('submit(*)', function (data) {
+                console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+                console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+                console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                //var val = $(".layui-form").serialize();
+                //console.log(val);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/PrizeSetting/Add",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    data: data.field,
+                    success: function (result) {
+                        if (result.code == 0) {
+                            parent.layer.closeAll();
+                            parent.$("#search").click();
+                        } else {
+                            layer.msg(result.msg);
+                        }
+                    },
+                    error: function (error) {
+                        alert("出错：" + error.responseText);
+                    }
+                });
+
+                //return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+
+        });
+
+        $(function () {
+
+            $('#cancel').click(function () {
+                parent.layer.closeAll();
+            });
+
+            //$('#add').click(function () {
+
+
+            //});
+        });
+    </script>
+</body>
+</html>

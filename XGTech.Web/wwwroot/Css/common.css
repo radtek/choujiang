@@ -1,0 +1,349 @@
+﻿
+/**2018/5/22**/
+/**修改页面按钮的图标**/
+
+
+
+/**统一button**/
+buttin.lh_to_lead_btn, button.lh_export_btn, button.lh_delete_btn, button.lh_addxz_btn, button.lh_save_btn, button.lh_cancle_btn, button.lh_search_btn, button.lh_affirm_btn, button.lh_close_btn, button.lh_select_btn {
+    padding: 0;
+    padding-left: 20px;
+}
+/**导入按钮**/
+.lh_to_lead_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -28px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**导出按钮**/
+.lh_export_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -86px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**下载按钮**/
+.lh_download_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -144px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**查询按钮**//**搜索**/
+.lh_search_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -202px;
+    padding-left: 20px;
+    background-color: #F3BA09;
+}
+/**删除按钮**/
+.lh_delete_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -260px;
+    padding-left: 20px;
+    background-color: #FF5722;/**红色**/
+}
+
+/**编辑按钮**/
+.lh_edit_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -318px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**修改按钮**/
+.lh_revise_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -376px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**新建按钮**/
+.lh_addxj_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -434px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**新增按钮**/ /**高度加59**/
+.lh_addxz_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -492px;
+    padding-left: 20px;
+    background-color: #FF5722; /**红色**/
+}
+/**新增按钮**/
+/**background: url(../images/button_icon.png) no-repeat -5px -550px;**/
+
+/**管理按钮**/
+.lh_manage_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -608px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**取消按钮**/
+.lh_cancle_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -666px;
+    padding-left: 20px;
+    background-color: #969090;/**灰色**/
+}
+/**关闭按钮**/
+.lh_close_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -724px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**返回按钮**/
+.lh_return_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -783px;
+    padding-left: 20px;
+    background-color: #1E9FFF;/**蓝色**/
+}
+/**确认按钮**/
+.lh_affirm_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -841px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**保存按钮**/
+.lh_save_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -899px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**选入按钮**/
+.lh_select_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -957px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**维修按钮**/
+.lh_maintain_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -1016px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**打印按钮**/
+.lh_print_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -1074px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**查看按钮**/
+.lh_check_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -1132px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**日志按钮**/
+.lh_log_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -1190px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**过往记录按钮**/
+.lh_record_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -1248px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**入库按钮**/
+.lh_put_in_storage_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -1306px;
+    padding-left: 20px;
+    background-color: #FF5722;
+}
+/**出库按钮**/
+.lh_put_out_storage_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -1364px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**审核按钮**/
+.lh_audit_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -1422px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**发送按钮**/
+.lh_send_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -1480px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+/**完成按钮**/
+.lh_accomplish_btn {
+    padding: 0;
+    width: 80px;
+    background: url(../images/button_icon.png) no-repeat -5px -1538px;
+    padding-left: 20px;
+    background-color: #009688;
+}
+
+
+
+
+/**查询页面**/
+#lh_search_content {
+    padding: 15px;
+}
+#lh_search_content .lh_inline_border {
+    margin: 10px 0;
+}
+#lh_search_content .layui-body {
+    border: 1px solid #e6e6e6;
+}
+#lh_search_content .lh_input {
+    width: 80%;
+    float: left;
+}
+#lh_search_content .lh_del {
+    float: left;
+    width: 20%;
+    height: 38px;
+    padding: 0;
+}
+#lh_search_content table th, table td {
+    text-align: center !important;
+}
+ .layui-form .layui-form-item:last-child{
+    margin-bottom:0;
+}
+
+ /**新增页面***/
+#lh_add_content a.lh_col_red, #lh_add_content span.lh_col_red {
+    color: red;
+}
+#lh_add_content .lh_input {
+    width: 80%;
+    float: left;
+}
+
+#lh_add_content .lh_del {
+    float: left;
+    width: 20%;
+    height: 38px;
+    padding: 0;
+}
+#lh_add_content .layui-form-item {
+    margin-left: 60px;
+    margin-top: 20px;
+}
+
+#lh_add_content .layui-form-select .layui-input {
+    padding-right: 0px !important;
+}
+
+#lh_add_content .panel-padding {
+    padding: 60px 10px !important;
+}
+
+#lh_add_content .col-xs-9 {
+    padding-left: 2px !important;
+    height: 900px !important;
+}
+
+#lh_add_content .col-xs-3 {
+    padding-right: 2px !important;
+    height: 900px !important;
+}
+
+#lh_add_content .layui-disabled {
+    background: #EEEEEE;
+    color: #595963 !important;
+}
+
+#lh_add_content .layui-disabled:hover {
+    color: #595963 !important;
+}
+
+/**选择窗口**/
+
+#lh_change .layui-form-item {
+    margin-left: 60px;
+    margin-top: 20px;
+    height: 100%;
+}
+#lh_change .lh_ml_-20 {
+    margin-left: 20px;
+}
+#lh_change .lh_height_100 {
+    height: 100%
+}
+/**导出页面**/
+#lh_export .lh_export_div{
+    text-align:center;
+}
+/**日志**/
+
+#lh_log .layui-form-item {
+    margin-left: 40px;
+    margin-top: 20px;
+}
+
+#lh_log .layui-form-select .layui-input {
+    padding-right: 0px !important;
+}
+
+
+
+#lh_log .col-xs-9 {
+    padding-left: 2px !important;
+    height: 900px !important;
+}
+
+#lh_log .col-xs-3 {
+    padding-right: 2px !important;
+    height: 900px !important;
+}
+
+#lh_log .layui-disabled {
+    background: #EEEEEE;
+    color: #595963 !important;
+}
+
+#lh_log .layui-disabled:hover {
+    color: #595963 !important;
+}

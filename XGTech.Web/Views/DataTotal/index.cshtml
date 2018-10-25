@@ -1,0 +1,180 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>数据统计</title>
+    <link rel="stylesheet" type="text/css" href="@Url.ContentVersioned("~/layui/css/layui.css")">
+</head>
+<body>
+    <form class="layui-form" action="">
+        <div class="layui-row">
+            <div class="layui-col-md3">
+                <div style=" margin-top:30px;  text-align:right; ">
+                    <div class="layui-form-item" pane>
+                        <label class="layui-form-label">时间类型</label>
+                        <div class="layui-input-block" style="width: 130px;">
+                                <select  disabled>
+                                    <option value="1">活动日期</option>
+                                </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" pane>
+                        <label class="layui-form-label">开始时间</label>
+                        <div class="layui-input-block" style="width: 130px;">
+                            <input type="text" id="start_time" placeholder="" autocomplete="off" class="layui-input" style="width: 130px;">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" pane>
+                        <label class="layui-form-label">结束时间</label>
+                        <div class="layui-input-block" style="width: 130px;">
+                            <input type="text" id="end_time" placeholder="" autocomplete="off" class="layui-input" style="width: 130px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md8">
+                <div style=" margin-top:30px; ">
+                    <div class="layui-form-item">
+                        <div class="layui-inline" style="margin-right:0px;">
+                            <label class="layui-form-label">活动标题：</label>
+                            <div class="layui-input-inline" style="width: 120px;">
+                                <input type="text" id="title" placeholder="请输入" autocomplete="off" class="layui-input" style="width: 120px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="  margin-top:60px; ">
+                    <div class="layui-input-block">
+                        <input id="Seach" class="layui-btn" value="检索" type="button" />
+                        <input id="Ex" class="layui-btn layui-btn-primary" value="导出" type="button" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <table class="layui-table" lay-filter="activitytable" id="activitytable"></table>
+    <script type="text/javascript" src="@Url.ContentVersioned("~/layui/layui.js")"></script>
+    <script>
+        layui.use(['table', 'laydate'], function () {
+            var table = layui.table;
+            var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start_time' //指定元素
+            });
+            laydate.render({
+                elem: '#end_time' //指定元素
+            });
+
+            TableOnLoad();
+
+            //加载表格
+            function TableOnLoad() {
+                var title = $("#title").val();
+                var datetype = $("#datetype").val();
+                var startTime = $("#start_time").val();
+                var endTime = $("#end_time").val();
+                var AType = $("#AType").val();
+                var Status = $("#Status").val();
+                var pm = {
+                    title: title,
+                    datetype: datetype,
+                    startTime: startTime,
+                    endTime: endTime,
+                    AType: AType,
+                    Status: Status
+                };
+                table.render({
+                    elem: '#activitytable'
+                    , url: '/DataTotal/GetList'
+                    , where: pm
+                    , title: "数据统计"
+                    , toolbar: '#toolbarBtn'
+                    , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    , cols: [[
+                        //{ type: 'checkbox', fixed: 'left' }
+                        { field: 'startDate', title: '开始日期'}
+                        , { field: 'endDate', title: '结束日期' }
+                        , { field: 'activity_time', title: '活动时长(分钟)' }
+                        , { field: 'activity_title', title: '活动标题' }
+                        , { field: 'roi', title: 'ROI' }
+                        , { field: 'visitor_count', title: '访客人数' }
+                        , { field: 'login_count', title: '登陆人数' } //单元格内容水平居中
+                        , { field: 'lottery_count', title: '抽奖人数' }
+                        , { field: 'win_count', title: '中奖人数' }
+                        , { field: 'cash_count', title: '兑奖人数' }
+                        , { field: 'lottery_number', title: '抽奖次数' }
+                        , { field: 'win_number', title: '中奖次数' }
+                        , { field: 'totalworth', title: '奖品价值' }
+                        , { field: 'activity_income', title: '活动收入' }
+                        , { field: 'share_number', title: '分享次数' }
+                        , { field: 'reflux_count', title: '回流人数' }
+                        //, { field: 'Status', title: '资格来源', sort: true, align: 'right', templet: '#StatusName' }
+                    ]]
+                    , page: true
+                });
+
+            }
+
+            //头工具栏事件
+            table.on('toolbar(activitytable)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'tongji':
+                        var data = checkStatus.data;
+                        break;
+                    case 'info':
+                        var data = checkStatus.data;
+                        break;
+                };
+            });
+
+            $("#Ex").on("click", function () {
+                var title = $("#title").val();
+                var datetype = $("#datetype").val();
+                var startTime = $("#start_time").val();
+                var endTime = $("#end_time").val();
+                var AType = $("#AType").val();
+                var Status = $("#Status").val();
+                var pm = {
+                    title: title,
+                    datetype: datetype,
+                    startTime: startTime,
+                    endTime: endTime,
+                    AType: AType,
+                    Status: Status
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/LotteryRecord/Export",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    data: pm,
+                    success: function (result) {
+                        if (result.code == 0) {
+                            window.location.href = result.url;
+                        } else {
+                            layer.alert("导出失败!", { icon: 2 });
+                        }
+                    },
+                    error: function (error) {
+                        layer.alert("出错：" + error.responseText, { icon: 2 });
+                    }
+                });
+            });
+
+            $("#Seach").on("click", function () {
+                TableOnLoad();
+            });
+        });
+    </script>
+</body>
+
+
+</html>

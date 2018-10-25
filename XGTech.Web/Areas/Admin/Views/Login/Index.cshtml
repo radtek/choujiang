@@ -1,0 +1,169 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>登录</title>
+    <meta content="text/html; charset=UTF-8" http-equiv=Content-Type />
+    <link rel=stylesheet type=text/css href="/images/index/common.css" media=screen />
+    <meta name=GENERATOR content="MSHTML 8.00.7600.16853" />
+    <script src="@Url.ContentVersioned("~/Turn/js/jquery.min.js")"></script>
+    <script src="@Url.ContentVersioned("~/layer/layer.js")"></script>
+    <script type="text/javascript">
+
+        function checkvalue(o) {
+            o.value = o.value.replace(/[^\d]/g, '');
+        }
+        function isshow() {
+            var pagei = layer.open({
+                type: 2,
+                shadeClose: false
+            });
+            var pm = {
+                time: Math.random()
+            };
+            $.ajax({
+                type: "POST",
+                url: "/Admin/Login/IsShow",
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                data: pm,
+                async: false,
+                success: function (result) {
+                    if (result.code == 1) {
+                        $("#iscode").val(result.code);
+                        $("#VerifyCode").show();
+                    } else {
+                        $("#iscode").val(result.code);
+                        $("#VerifyCode").hide();
+                    }
+                    layer.close(pagei);
+                },
+                error: function (error) {
+                    layer.close(pagei);
+                    showmsg(error.responseText, "username");
+                }
+            });
+        }
+
+        $().ready(function () {
+            $("#username").focus();
+            isshow();
+            $(document).keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $("#loginBtn").trigger("click");
+                }
+            });
+            $("#loginBtn").click(function () {
+                var username = $("#username").val();
+                var password = $("#password").val();
+                var code = $("#code").val();
+                var iscode = $("#iscode").val();
+                if (username == "")
+                    return layer.tips('工号不能为空', '#username');
+                if (password == "")
+                    return layer.tips('密码不能为空', '#password');
+                if (iscode == "1") {
+                    if (code == "")
+                        return layer.tips('验证码不能为空', '#code');
+                }
+                var pagei = layer.open({
+                    type: 2,
+                    shadeClose: false
+                });
+                var pm = {
+                    username: username,
+                    password: password,
+                    code: code,
+                    time: Math.random()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/Login/UserLogin",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    data: pm,
+                    async: false,
+                    success: function (result) {
+                        if (result.code == 1) {
+                            location.href = "/Admin/Home/Index";
+                        } else {
+                            isshow();
+                            layer.tips(result.msg, '#' + result.data);
+                            //showmsg(result.msg, result.data);
+                        }
+                        layer.close(pagei);
+                    },
+                    error: function (error) {
+                        layer.close(pagei);
+                        showmsg(error.responseText, "username");
+                    }
+                });
+            });
+        });
+
+        function SuccessMessage(msg) {
+            var index = layer.open({
+                content: msg,
+                btn: ['确认'],
+                icon: 1
+                , yes: function () {
+                    layer.close(index);
+
+                }
+            });
+        }
+        function showmsg(msg, obj) {
+            var index = layer.open({
+                content: msg
+                , btn: ['确认']
+                , skin: 'footer'
+                , icon: 2
+                , yes: function () {
+                    layer.close(index);
+                    $("#" + obj).focus();
+                }
+            });
+        }
+    </script>
+</head>
+<body id=loginFrame>
+    <input type="hidden" value="0" id="iscode" />
+    <div id=header>
+        @*<div id=logo>
+                <a href="#"></a>
+            </div>*@
+    </div>
+    <div id=loginBox>
+        <div id=loginBoxHeader></div>
+        <div id=loginBoxBody>
+            <ul class=floatLeft>
+                <li>
+                    <h4>账号登录</h4>
+                </li>
+                <li>
+                    <p>工号:</p><input id="username" class="textInput"  onkeyup='checkvalue(this);'  maxLength="4" size=27 type="text"  autocomplete="off" />
+                </li>
+                <li>
+                    <p>密码:</p><input id="password" class="textInput" maxLength=12 size=27 type="password"  autocomplete="off" /> <a href="/admin/Login/ForgetPass" class="highlight">忘记密码？</a>
+                </li>
+                <li style="display:none;" id="VerifyCode">
+                    <p>验证码:</p><input id="code" class="textInput"  maxLength="4" size="16" type="text"   autocomplete="off" />
+                    <img src="/VerifyCode/Member" onclick="this.src='/VerifyCode/Member?Seed=' + Math.random();" style=" height:29px; margin-left:5px;margin-top:-1px;  vertical-align: middle; margin-bottom:2px;text-align: center;" />
+                </li>
+                <li class=highlight>
+                    <input id="loginBtn" value="登录" tabindex="3" type="button">
+                </li>
+                <li></li>
+            </ul>
+            <div class=floatRight>
+                推广运营管理系统
+            </div><br clear=all>
+        </div>
+        <div id=loginBoxFooter></div>
+    </div>
+    <div id=footer>
+
+    </div>
+</body>
+</html>

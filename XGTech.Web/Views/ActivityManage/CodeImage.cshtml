@@ -1,0 +1,73 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>二维码</title>
+    <link rel="stylesheet" type="text/css" href="@Url.ContentVersioned("~/layui/css/layui.css")" media="all">
+    <script type="text/javascript" src="@Url.ContentVersioned("~/Scripts/jquery-1.10.2.min.js")"></script>
+    <script type="text/javascript" src="@Url.ContentVersioned("~/layui/layui.js")"></script>
+    <script type="text/javascript" src="@Url.ContentVersioned("~/jquery-zclip/jquery.zclip.js")"></script>
+</head>
+<body>
+
+
+    <div class="layui-col-md6">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                链接：<div class="layui-input-inline">
+                    <input type="text" name="url" id="url" style="height:25px; line-height:25px; width:270px; " autocomplete="off" class="layui-input">
+                </div>
+                <input class="layui-btn layui-btn-sm" id="copybtn" type="button" style=" width:45px;height:23px; line-height:23px; " value="复制" />
+            </div>
+            <div class="layui-card-body center-block" style=" text-align:center;">
+                <img id="ImagePic" style=" width:235px;" />
+            </div>
+        </div>
+    </div>
+   
+    <script>
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+
+        layui.use(['table', 'laydate'], function () {
+            var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+            var id = getUrlParam("id");
+            var pm = {
+                activityID: id
+            };
+
+            $.ajax({
+                url: "/ActivityManage/GetCodeImage",
+                tyep: "get",
+                dataType: "json",
+                data: pm,
+                async: false,
+                success: function (data) {
+                    $("#url").val(data.msg);
+                    $("#ImagePic").attr("src", "data:image/gif;base64," + data.data);
+                    $('#copybtn').zclip({
+                        path: '/jquery-zclip/ZeroClipboard.swf',
+                        copy: function () {
+                            return $('#url').val();
+                        },
+                        afterCopy: function () {
+                            layui.layer.alert("复制成功", { icon: 1 })
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>忘记密码</title>
+    <meta content="text/html; charset=UTF-8" http-equiv=Content-Type />
+    <link rel=stylesheet type=text/css href="/images/index/common.css" media=screen />
+    <meta name=GENERATOR content="MSHTML 8.00.7600.16853" />
+    <script src="@Url.ContentVersioned("~/Turn/js/jquery.min.js")"></script>
+    <script src="@Url.ContentVersioned("~/layer/layer.js")"></script>
+    <script type="text/javascript">
+
+        function checkvalue(o) {
+            o.value = o.value.replace(/[^\d]/g, '');
+        }
+        $().ready(function () {
+            $("#fanhui").click(function () {
+                location.href = '/admin/login/index';
+            });
+            $("#loginBtn").click(function () {
+                var username = $("#user_name").val();
+                var cell = $("#cell").val();
+                var cellcode = $("#cellcode").val();
+                var newpassword = $("#newpassword").val();
+                if (username == "")
+                    return layer.tips('工号不能为空', '#user_name');
+                if (cell == "")
+                    return layer.tips('手机号码不能为空', '#cell');
+                if (cellcode == "")
+                    return layer.tips('验证码不能为空', '#cellcode');
+                if (newpassword == "")
+                    return layer.tips('新密码不能为空', '#newpassword');
+                if (!checkPass(newpassword))
+                    return layer.tips('密码长度为6到12位，开头必须为英文字母', '#newpassword');
+                var pagei = layer.open({
+                    type: 2,
+                    shadeClose: false
+                });
+                var pm = {
+                    username: username,
+                    cell: cell,
+                    cellcode: cellcode,
+                    newpassword: newpassword,
+                    time: Math.random()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/Login/ChangePassWord",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    data: pm,
+                    async: false,
+                    success: function (result) {
+                        if (result.code == 1) {
+                            layer.close(pagei);
+                            SuccessMessage1(result.msg)
+                        } else {
+                            layer.close(pagei);
+                            return layer.tips(result.msg, "#" + result.data);
+                        }
+                    },
+                    error: function (error) {
+                        layer.close(pagei);
+                        showmsg(error.responseText, "username");
+                    }
+                });
+            });
+
+            //验证码
+            var count = 0;
+            $('#vali_btn').bind("click", function () {
+                if (count < 0) { count = 0; };
+                if (count == 0) {
+                    var username = $('#user_name').val();
+                    var cell = $('#cell').val();
+                    if (username == "") {
+                        count = 0;
+                        return layer.tips('工号不能为空，请重新输入', '#user_name');
+
+                    } else {
+                        if (cell == null || cell == "" || cell.length != 11) {
+                            count = 0;
+                            return layer.tips('手机号输入不正确，请重新输入', '#cell');
+                        } else {
+                            var pagei = layer.open({
+                                type: 2,
+                                shadeClose: false
+                            });
+                            var pm = {
+                                cell: cell,
+                                username: username,
+                                time: Math.random()
+                            };
+                            $.ajax({
+                                type: "POST",
+                                url: "/Admin/Login/SendMessage",
+                                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                                data: pm,
+                                async: false,
+                                success: function (result) {
+                                    layer.close(pagei);
+                                    if (result.code == 1) {
+                                        SuccessMessage(result.msg)
+                                        count = 90;
+                                        change();
+                                    } else {
+                                        count = 0;
+                                        return layer.tips(result.msg, '#cell');
+
+                                    }
+                                },
+                                error: function (error) {
+                                    layer.close(pagei);
+                                    showmsg(error.responseText, "cell");
+
+                                }
+                            });
+                        }
+                    }
+                }
+
+                function change() {
+                    setTimeout(function () {
+                        var $a = $("#vali_btn")
+                        $a.addClass("dis");
+                        $a.val("" + (count) + "秒后重新获取");
+                        count = count - 1;
+                        if (count > 0) {
+                            change();
+                        } else {
+                            $a.removeClass("dis");
+                            $a.val("获取验证码");
+                        }
+                    }, 1000);
+                }
+                return false;
+
+            });
+        });
+
+        function SuccessMessage1(msg) {
+            var index = layer.open({
+                content: msg,
+                btn: ['确认'],
+                icon: 1
+                , yes: function () {
+                    location.href = "/admin/login/index";
+                    layer.close(index);
+                }
+            });
+        }
+
+        function SuccessMessage(msg) {
+            var index = layer.open({
+                content: msg,
+                btn: ['确认'],
+                icon: 1
+                , yes: function () {
+                    layer.close(index);
+                }
+            });
+        }
+
+        function showmsg(msg, obj) {
+            var index = layer.open({
+                content: msg
+                , btn: ['确认']
+                , skin: 'footer'
+                , icon: 2
+                , yes: function () {
+                    layer.close(index);
+                    $("#" + obj).focus();
+                }
+            });
+        }
+
+
+        function checkPass(s) {
+            var reg = /^[a-zA-Z]\w{6,12}$/;
+            if (!reg.exec(s)) return false
+            return true
+        }
+    </script>
+</head>
+<body id="loginFrame">
+    <div id=header>
+        @*<div id=logo>
+                <a href="#"></a>
+            </div>*@
+    </div>
+    <div id=loginBox>
+        <div id=loginBoxHeader></div>
+        <div id=loginBoxBody>
+            <ul class=floatLeft>
+                <li>
+                    <h4>忘记密码</h4>
+                </li>
+                <li>
+                    <p>工号:</p><input id="user_name" class="textInput" onkeyup='checkvalue(this);'  maxLength="4" size=27 type="text" />
+                </li>
+                <li>
+                    <p>手机号码:</p><input id="cell" class="textInput" onkeyup='checkvalue(this);'  maxLength="11" size=27 type="text">
+                </li>
+                <li>
+                    <p>验证码:</p><input id="cellcode" class="textInput"onkeyup='checkvalue(this);'  maxLength="4" size=12 type="text">
+                    <input class="btn" value="获取验证码" id="vali_btn" type="button">
+                </li>
+                <li>
+                    <p>新密码:</p><input id="newpassword" class="textInput" maxLength="12" size=27 type="password">
+                </li>
+                <li class=highlight>
+                    <input id="loginBtn" value="确定" type="button">
+                    <input id="fanhui" class="btn1" value="返回登录" type="button">
+                </li>
+                <li></li>
+            </ul>
+            <div class=floatRight>
+                推广运营管理系统
+            </div><br clear=all>
+        </div>
+        <div id=loginBoxFooter></div>
+    </div>
+    <div id=footer>
+
+    </div>
+</body>
+</html>

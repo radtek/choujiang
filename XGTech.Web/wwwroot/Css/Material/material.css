@@ -1,0 +1,27 @@
+.layui-body{
+    border: 1px solid #e6e6e6;
+}
+.cy-inputS{
+    width:80%;
+    float:left;
+}
+.cy-del{
+    float:left;
+    width:20%;
+    height: 38px;
+    padding:0
+}
+/*.layui-form{
+    border-bottom: 1px solid #e6e6e6;
+}*/
+.cy-inline-border{
+    padding: 10px 0;
+}
+table th,
+table td{
+    text-align: center !important;
+}
+.materialtable{
+    min-width: 1000px;
+    overflow-x: auto;
+}

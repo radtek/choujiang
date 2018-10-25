@@ -1,0 +1,91 @@
+body{
+	background-size: cover;
+background:url(../img/2.jpg) fixed center center no-repeat;
+background-attachment:fixed;
+background-repeat:no-repeat;
+-moz-background-size:cover;
+-webkit-background-size:cover;
+
+}
+.top{
+	height: 10%;
+	min-height: 50px;
+
+	}
+
+.zhong{
+	
+	margin: auto;
+	width: 30%;
+	
+	min-width: 400px;
+}
+ul{
+	float: right;
+	margin-right: 30px;
+	margin-top: 20px;
+
+}
+ul li{
+	list-style: none;
+	float: left;
+	margin-right: 5px;
+	overflow: hidden;
+}
+a{color:#FFFFFF;}
+.one{text-align: center; color: #0F0F0F; font-size: 18px; 
+    padding: 10px auto;}
+    p{
+    	margin-top: 10px;
+    }
+    .adds{padding: 6px 19px;}
+    .input-group-addon {
+        color: #0f0f0f;
+    background-color: #fff;}
+.inputs{
+	margin:5% auto;
+	
+}
+/*input:checked{-webkit-appearance:none;background-color: #f4a100;}*/
+        /*input[type=checkbox]:checked::before {
+            color:white;
+            background-color:red;
+            
+        }*/
+       .denglu{
+       	width: 100%;
+       	text-align: center;
+       	margin-bottom: 10%;
+       	height: 42px;
+       }
+
+        input[type="checkbox"]:checked {
+    border-color: blue;
+    color: blue;
+  }  
+
+.layui-form-checkbox[lay-skin=primary]:hover i {
+    border-color: #eea43c;
+    color:  #EEA43C;
+}
+.layui-form-checked[lay-skin=primary] i {
+    border-color: #ed9c2a;
+     background-color: #ffffff; 
+    color: #eea135;
+}
+.layui-form-checkbox[lay-skin=primary] i {
+  
+    border: 1px solid #ec9821;
+    }
+    
+.form-control:focus {
+    border-color: #5cb85c;}
+    
+ .input-group-addon {
+ 	background-color: #FFFFFF;}
+/*.form-control {
+	    border: 1px solid #fff;
+}*/
+.layui-form-item{
+	margin-top: -11px;
+    margin-bottom: 3px;}

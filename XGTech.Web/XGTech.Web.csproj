@@ -1,0 +1,371 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DownExcel\**" />
+    <Content Remove="DownExcel\**" />
+    <EmbeddedResource Remove="DownExcel\**" />
+    <None Remove="DownExcel\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\layer-v3.1.1.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Properties\PublishProfiles\CustomProfile.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.Redis" Version="0.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Redis.Core" Version="1.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
+    <PackageReference Include="StarNet.Multimedia.IO.Helper" Version="1.0.15" />
+    <PackageReference Include="ZKWeb.Fork.QRCoder" Version="1.3.0" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.6.0" />    <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="Views\_ViewImports.cshtml" />
+    <None Include="Views\_ViewStart.cshtml" />
+    <None Include="wwwroot\Css\font\iconfont.js" />
+    <None Include="wwwroot\Css\font\iconfont.svg" />
+    <None Include="wwwroot\DownExcel\供应商详细信息20180313125106.xlsx" />
+    <None Include="wwwroot\DownExcel\供应商详细信息20180313125759.xlsx" />
+    <None Include="wwwroot\DownExcel\供应商详细信息20180313130133.xlsx" />
+    <None Include="wwwroot\DownExcel\单位资料20180313130202.xlsx" />
+    <None Include="wwwroot\DownExcel\客户资料.xlsx" />
+    <None Include="wwwroot\DownExcel\库位20180314170958.xls" />
+    <None Include="wwwroot\DownExcel\月申购计划20180313100048.xlsx" />
+    <None Include="wwwroot\DownExcel\月申购计划20180313100127.xlsx" />
+    <None Include="wwwroot\DownExcel\月申购计划20180314083932.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\业务员运单发放上传模板.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\单位资料.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\员工导入模板.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\商户上传模板.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\商户绑定客服上传模板.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\岗位上传模板.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\收款单导入模版.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\月申购计划模板.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\期初应收导入模板.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\社保花名册导入模板.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\考勤休息天数导入模板.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\资产入库.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\资产转移.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\资产领用.xlsx" />
+    <None Include="wwwroot\ExcelTemplate\附加费管理上传模板.xlsx" />
+    <None Include="wwwroot\fileUpload\file\月申购计划20180313100127.xlsx" />
+    <None Include="wwwroot\fileUpload\image\月申购计划20180313100127.xlsx" />
+    <None Include="wwwroot\fileUpload\upload\636565129463325282资产入库模板.xlsx" />
+    <None Include="wwwroot\fileUpload\upload\月申购计划20180313100127.xlsx" />
+    <None Include="wwwroot\font\iconfont.svg" />
+    <None Include="wwwroot\images\banner1.svg" />
+    <None Include="wwwroot\images\banner2.svg" />
+    <None Include="wwwroot\images\banner3.svg" />
+    <None Include="wwwroot\images\banner4.svg" />
+    <None Include="wwwroot\jquery-zclip\jquery.zclip.js" />
+    <None Include="wwwroot\jquery-zclip\LICENSE" />
+    <None Include="wwwroot\jquery-zclip\README.md" />
+    <None Include="wwwroot\jquery-zclip\ZeroClipboard.swf" />
+    <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\js\site.min.js" />
+    <None Include="wwwroot\layer-v3.1.1\layer-v3.1.1\layer\layer.js" />
+    <None Include="wwwroot\layer-v3.1.1\layer-v3.1.1\layer\mobile\layer.js" />
+    <None Include="wwwroot\layer-v3.1.1\layer-v3.1.1\文档\jquery下载.url" />
+    <None Include="wwwroot\layer-v3.1.1\layer-v3.1.1\文档\layer官网.url" />
+    <None Include="wwwroot\layer-v3.1.1\layer-v3.1.1\文档\layer文档.url" />
+    <None Include="wwwroot\layer-v3.1.1\layer-v3.1.1\文档\layui社区.url" />
+    <None Include="wwwroot\layer-v3.1.1\layer-v3.1.1\文档\获得layim.url" />
+    <None Include="wwwroot\layer-v3.1.1\layer\layer.js" />
+    <None Include="wwwroot\layer-v3.1.1\layer\mobile\layer.js" />
+    <None Include="wwwroot\layer-v3.1.1\文档\jquery下载.url" />
+    <None Include="wwwroot\layer-v3.1.1\文档\layer官网.url" />
+    <None Include="wwwroot\layer-v3.1.1\文档\layer文档.url" />
+    <None Include="wwwroot\layer-v3.1.1\文档\layui社区.url" />
+    <None Include="wwwroot\layer-v3.1.1\文档\获得layim.url" />
+    <None Include="wwwroot\layer\extend\layer.ext.js" />
+    <None Include="wwwroot\layer\layer.js" />
+    <None Include="wwwroot\layer\skin\__MACOSX\espresso\._.DS_Store" />
+    <None Include="wwwroot\layer_mobile\layer.js" />
+    <None Include="wwwroot\layui\font\iconfont.svg" />
+    <None Include="wwwroot\layui\layui.all.js" />
+    <None Include="wwwroot\layui\layui.js" />
+    <None Include="wwwroot\layui\lay\modules\carousel.js" />
+    <None Include="wwwroot\layui\lay\modules\code.js" />
+    <None Include="wwwroot\layui\lay\modules\colorpicker.js" />
+    <None Include="wwwroot\layui\lay\modules\element.js" />
+    <None Include="wwwroot\layui\lay\modules\flow.js" />
+    <None Include="wwwroot\layui\lay\modules\form.js" />
+    <None Include="wwwroot\layui\lay\modules\jquery.js" />
+    <None Include="wwwroot\layui\lay\modules\laydate.js" />
+    <None Include="wwwroot\layui\lay\modules\layedit.js" />
+    <None Include="wwwroot\layui\lay\modules\layer.js" />
+    <None Include="wwwroot\layui\lay\modules\laypage.js" />
+    <None Include="wwwroot\layui\lay\modules\laytpl.js" />
+    <None Include="wwwroot\layui\lay\modules\mobile.js" />
+    <None Include="wwwroot\layui\lay\modules\rate.js" />
+    <None Include="wwwroot\layui\lay\modules\slider.js" />
+    <None Include="wwwroot\layui\lay\modules\table.js" />
+    <None Include="wwwroot\layui\lay\modules\tree.js" />
+    <None Include="wwwroot\layui\lay\modules\upload.js" />
+    <None Include="wwwroot\layui\lay\modules\util.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-theme.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-theme.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\lib\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\npm.js" />
+    <None Include="wwwroot\lib\bootstrap\LICENSE" />
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\additional-methods.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\additional-methods.min.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\jquery.validate.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\jquery.validate.min.js" />
+    <None Include="wwwroot\lib\jquery-validation\LICENSE.md" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
+    <None Include="wwwroot\login\bootstrap\css\bootstrap-theme.css.map" />
+    <None Include="wwwroot\login\bootstrap\css\bootstrap-theme.min.css.map" />
+    <None Include="wwwroot\login\bootstrap\css\bootstrap.css.map" />
+    <None Include="wwwroot\login\bootstrap\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\login\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\login\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="wwwroot\login\bootstrap\js\bootstrap.js" />
+    <None Include="wwwroot\login\bootstrap\js\bootstrap.min.js" />
+    <None Include="wwwroot\login\bootstrap\js\jquery-1.8.3.js" />
+    <None Include="wwwroot\login\bootstrap\js\jquery-1.8.3.min.js" />
+    <None Include="wwwroot\login\bootstrap\js\jquery.js" />
+    <None Include="wwwroot\login\bootstrap\js\jquery.min.js" />
+    <None Include="wwwroot\login\bootstrap\js\npm.js" />
+    <None Include="wwwroot\login\layui\font\iconfont.svg" />
+    <None Include="wwwroot\login\layui\layui.all.js" />
+    <None Include="wwwroot\login\layui\layui.js" />
+    <None Include="wwwroot\login\layui\lay\modules\carousel.js" />
+    <None Include="wwwroot\login\layui\lay\modules\code.js" />
+    <None Include="wwwroot\login\layui\lay\modules\element.js" />
+    <None Include="wwwroot\login\layui\lay\modules\flow.js" />
+    <None Include="wwwroot\login\layui\lay\modules\form.js" />
+    <None Include="wwwroot\login\layui\lay\modules\jquery.js" />
+    <None Include="wwwroot\login\layui\lay\modules\laydate.js" />
+    <None Include="wwwroot\login\layui\lay\modules\layedit.js" />
+    <None Include="wwwroot\login\layui\lay\modules\layer.js" />
+    <None Include="wwwroot\login\layui\lay\modules\laypage.js" />
+    <None Include="wwwroot\login\layui\lay\modules\laytpl.js" />
+    <None Include="wwwroot\login\layui\lay\modules\mobile.js" />
+    <None Include="wwwroot\login\layui\lay\modules\table.js" />
+    <None Include="wwwroot\login\layui\lay\modules\tree.js" />
+    <None Include="wwwroot\login\layui\lay\modules\upload.js" />
+    <None Include="wwwroot\login\layui\lay\modules\util.js" />
+    <None Include="wwwroot\Scripts\AssertRepair\index.js" />
+    <None Include="wwwroot\Scripts\AssetInventorySummary\index.js" />
+    <None Include="wwwroot\Scripts\AssetQuery\index.js" />
+    <None Include="wwwroot\Scripts\AssetTransfers\index.js" />
+    <None Include="wwwroot\Scripts\Asset\comasset.js" />
+    <None Include="wwwroot\Scripts\Asset\empcomasset.js" />
+    <None Include="wwwroot\Scripts\Chart\chart.js" />
+    <None Include="wwwroot\Scripts\Common\date.js" />
+    <None Include="wwwroot\Scripts\Common\form.js" />
+    <None Include="wwwroot\Scripts\Common\open.js" />
+    <None Include="wwwroot\Scripts\Common\table.js" />
+    <None Include="wwwroot\Scripts\Common\verytable.js" />
+    <None Include="wwwroot\Scripts\Common\verytable1.js" />
+    <None Include="wwwroot\Scripts\CompreManager\index.js" />
+    <None Include="wwwroot\Scripts\ContractExpirationWar\index.js" />
+    <None Include="wwwroot\Scripts\ContractManager\ContractManager.js" />
+    <None Include="wwwroot\Scripts\ContractManager\RentalContractSave.js" />
+    <None Include="wwwroot\Scripts\ContractManager\RentContractSave.js" />
+    <None Include="wwwroot\Scripts\CustomerInfo\CustomerInfo.js" />
+    <None Include="wwwroot\Scripts\echart.js" />
+    <None Include="wwwroot\Scripts\employe\employe.js" />
+    <None Include="wwwroot\Scripts\extend\grid.js" />
+    <None Include="wwwroot\Scripts\extend\treeGrid.js" />
+    <None Include="wwwroot\Scripts\ImgView\js\functions.js" />
+    <None Include="wwwroot\Scripts\ImgView\js\html5.js" />
+    <None Include="wwwroot\Scripts\ImgView\js\jquery.min.js" />
+    <None Include="wwwroot\Scripts\ImgView\js\ma5gallery.js" />
+    <None Include="wwwroot\Scripts\index.js" />
+    <None Include="wwwroot\Scripts\jqajax.js" />
+    <None Include="wwwroot\Scripts\jqmodules\ajax.js" />
+    <None Include="wwwroot\Scripts\jqmodules\dtable.js" />
+    <None Include="wwwroot\Scripts\jqmodules\elem.js" />
+    <None Include="wwwroot\Scripts\jqmodules\jqdate.js" />
+    <None Include="wwwroot\Scripts\jqmodules\jqform.js" />
+    <None Include="wwwroot\Scripts\jqmodules\modal.js" />
+    <None Include="wwwroot\Scripts\jqmodules\tabmenu.js" />
+    <None Include="wwwroot\Scripts\jqmodules\tags.js" />
+    <None Include="wwwroot\Scripts\jquery-1.10.2.min.js" />
+    <None Include="wwwroot\Scripts\jquery.qrcode.js" />
+    <None Include="wwwroot\Scripts\jquery.qrcode.min.js" />
+    <None Include="wwwroot\Scripts\jquery.qrcode.min.js.map" />
+    <None Include="wwwroot\Scripts\layui1.0\font\iconfont.svg" />
+    <None Include="wwwroot\Scripts\layui1.0\laydate\laydate.js" />
+    <None Include="wwwroot\Scripts\layui1.0\laydate\theme\default\font\iconfont.svg" />
+    <None Include="wwwroot\Scripts\layui1.0\layui.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\all-mobile.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\all.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\dest\layui.all.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\lib\jquery.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\code.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\element.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\flow.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\form.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\jquery.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\laydate.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\layedit.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\layer.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\layim.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\laypage.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\laytpl.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\mobile.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\mobile\layer-mobile.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\mobile\layim-mobile-open.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\mobile\layim-mobile.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\mobile\upload-mobile.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\mobile\zepto.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\tree.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\upload.js" />
+    <None Include="wwwroot\Scripts\layui1.0\lay\modules\util.js" />
+    <None Include="wwwroot\Scripts\layui\font\iconfont.svg" />
+    <None Include="wwwroot\Scripts\layui\laydate\laydate.js" />
+    <None Include="wwwroot\Scripts\layui\laydate\theme\default\font\iconfont.svg" />
+    <None Include="wwwroot\Scripts\layui\layui.all.js" />
+    <None Include="wwwroot\Scripts\layui\layui.js" />
+    <None Include="wwwroot\Scripts\layui\lay\all-mobile.js" />
+    <None Include="wwwroot\Scripts\layui\lay\all.js" />
+    <None Include="wwwroot\Scripts\layui\lay\dest\layui.all.js" />
+    <None Include="wwwroot\Scripts\layui\lay\lib\jquery.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\carousel.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\code.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\element.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\flow.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\form.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\jquery.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\laydate.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\layedit.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\layer.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\layim.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\laypage.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\laytpl.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\mobile.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\mobile\layer-mobile.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\mobile\layim-mobile-open.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\mobile\layim-mobile.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\mobile\upload-mobile.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\mobile\zepto.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\table.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\tree.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\upload.js" />
+    <None Include="wwwroot\Scripts\layui\lay\modules\util.js" />
+    <None Include="wwwroot\Scripts\lib\echarts.js" />
+    <None Include="wwwroot\Scripts\lib\webuploader.js" />
+    <None Include="wwwroot\Scripts\list.js" />
+    <None Include="wwwroot\Scripts\lodop\CLodop_Setup_for_Win32NT.exe" />
+    <None Include="wwwroot\Scripts\lodop\install_lodop32.exe" />
+    <None Include="wwwroot\Scripts\lodop\install_lodop64.exe" />
+    <None Include="wwwroot\Scripts\lodop\lodop.print.js" />
+    <None Include="wwwroot\Scripts\lodop\LodopFuncs.js" />
+    <None Include="wwwroot\Scripts\login.js" />
+    <None Include="wwwroot\Scripts\main.js" />
+    <None Include="wwwroot\Scripts\Main\index.js" />
+    <None Include="wwwroot\Scripts\member.js" />
+    <None Include="wwwroot\Scripts\MonSubScription\AddMonSub.js" />
+    <None Include="wwwroot\Scripts\MonSubScription\GetTj.js" />
+    <None Include="wwwroot\Scripts\MonSubScription\index.js" />
+    <None Include="wwwroot\Scripts\myform.js" />
+    <None Include="wwwroot\Scripts\NetConfig\Addnet.js" />
+    <None Include="wwwroot\Scripts\NetConfig\Editnet.js" />
+    <None Include="wwwroot\Scripts\NetConfig\Netconfig.js" />
+    <None Include="wwwroot\Scripts\NetConfig\Setpermission.js" />
+    <None Include="wwwroot\Scripts\OutOrder\index.js" />
+    <None Include="wwwroot\Scripts\product.js" />
+    <None Include="wwwroot\Scripts\qrcode.js" />
+    <None Include="wwwroot\Scripts\qrcode.min.js" />
+    <None Include="wwwroot\Scripts\qrcode.min.js.map" />
+    <None Include="wwwroot\Scripts\RentalCost\CostType.js" />
+    <None Include="wwwroot\Scripts\RentalCost\Index.js" />
+    <None Include="wwwroot\Scripts\RentalCost\RentalCostSave.js" />
+    <None Include="wwwroot\Scripts\ReportManager\LeaseReport.js" />
+    <None Include="wwwroot\Scripts\ReportManager\RentalCostReport.js" />
+    <None Include="wwwroot\Scripts\ReportManager\RentedReport.js" />
+    <None Include="wwwroot\Scripts\ResourcManager\ContractCost.js" />
+    <None Include="wwwroot\Scripts\ResourcManager\Index.js" />
+    <None Include="wwwroot\Scripts\ResourcManager\ResourcManagerIndex.js" />
+    <None Include="wwwroot\Scripts\ResourcManager\ResourcManagerSave.js" />
+    <None Include="wwwroot\Scripts\role.js" />
+    <None Include="wwwroot\Scripts\simpleform.js" />
+    <None Include="wwwroot\Scripts\SiteAssetManager\AddSiteAssetManager.js" />
+    <None Include="wwwroot\Scripts\SiteAssetManager\SiteAssetManagerIndex.js" />
+    <None Include="wwwroot\Scripts\SiteAssetManager\UpdateCode.js" />
+    <None Include="wwwroot\Scripts\SiteAssetsDetail\index.js" />
+    <None Include="wwwroot\Scripts\sto.tree.js" />
+    <None Include="wwwroot\Scripts\StorageLocation\StorageLocation.js" />
+    <None Include="wwwroot\Scripts\User\back.js" />
+    <None Include="wwwroot\Scripts\User\homeindex.js" />
+    <None Include="wwwroot\Turn\js\award.js" />
+    <None Include="wwwroot\Turn\js\awardRotate.js" />
+    <None Include="wwwroot\Turn\js\jquery.min.js" />
+    <None Include="wwwroot\Turn\js\main.js" />
+    <None Include="wwwroot\Turn\js\mui.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SqlSugar\SqlSugar.csproj" />
+    <ProjectReference Include="..\XGTech.BLL\XGTech.BLL.csproj" />
+    <ProjectReference Include="..\XGTech.Config\XGTech.Config.csproj" />
+    <ProjectReference Include="..\XGTech.IBLL\XGTech.IBLL.csproj" />
+    <ProjectReference Include="..\XGTech.Model\XGTech.Model.csproj" />
+    <ProjectReference Include="..\XGTech.Utility\XGTech.Utility.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="wwwroot\login\js\" />
+    <Folder Include="wwwroot\Turn\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Admin\Views\Shared\_Layout.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Admin\Views\Shared\_ValidationScriptsPartial.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Admin\Views\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Admin\Views\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="http://json.schemastore.org/band-manifest" /></VisualStudio></ProjectExtensions>
+
+</Project>

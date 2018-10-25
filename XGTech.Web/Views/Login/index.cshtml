@@ -1,0 +1,281 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>登陆</title>
+    <script src="@Url.ContentVersioned("~/Turn/js/jquery.min.js")"></script>
+    <script src="@Url.ContentVersioned("~/layer_mobile/layer.js")"></script>
+    <style>
+        .iphonetext {
+            height: 40px;
+            width: 100%;
+            font-family: "Microsoft YaHei", 微软雅黑, 宋体;
+            border: 0px;
+        }
+
+        .cellcodetext {
+            height: 40px;
+            width: 70%;
+            font-family: "Microsoft YaHei", 微软雅黑, 宋体;
+            border: 0px;
+        }
+
+        .btn {
+            cursor: pointer;
+            height: 32px;
+            width: 28%;
+            border: 0px solid #ccc;
+            color: rgba(255, 255, 255, 1);
+            background-color: rgb(243, 90, 12);
+            font-family: "Microsoft YaHei", 微软雅黑, 宋体;
+            font-size: 0.5em;
+            padding: 2px;
+            box-shadow: 0px 2px 0px rgba(255, 106, 0), 0px 2px 5px rgba(0, 0, 0, .7);
+            -webkit-transition: all .1s ease;
+            -moz-transition: all .1s ease;
+            transition: all .1s ease;
+        }
+
+        .loginbtn {
+            cursor: pointer;
+            height: 38px;
+            width: 90%;
+            margin-top: 15px;
+            border: 0px solid #ccc;
+            color: rgba(255, 255, 255, 1);
+            background-color: rgb(255, 106, 0);
+            font-family: "Microsoft YaHei", 微软雅黑, 宋体;
+            font-size: 1em;
+            padding: 2px;
+            box-shadow: 0px 2px 0px rgba(255, 106, 0), 0px 2px 5px rgba(0, 0, 0, .7);
+            -webkit-transition: all .1s ease;
+            -moz-transition: all .1s ease;
+            transition: all .1s ease;
+        }
+
+        .dis {
+            color: rgba(255, 255, 255, 1);
+            background-color: #aaa;
+            box-shadow: 0px 2px 0px #808080, 0px 2px 5px rgba(0, 0, 0, .7);
+        }
+
+
+        .clear {
+            display: none;
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            margin: -33px 0 0 91%;
+        }
+
+        .iphonetext::-ms-clear {
+            display: none;
+        }
+
+        .iphonetext:valid + .clear {
+            display: inline;
+        }
+
+        .layui-m-layercont {
+            padding: 15px 30px;
+        }
+
+        .layui-m-layerbtn {
+            height: 30px;
+            line-height: 30px;
+        }
+    </style>
+
+    <script>
+        $().ready(function () {
+            $("#btnclear").click(function () {
+                $("#cell").val("");
+                $("#cell").focus();
+            });
+            $("#login").click(function () {
+                var cell = $("#cell").val();
+                var cellcode = $("#cellcode").val();
+                if (cell == "" || cell.length != 11)
+                    return showmsg("手机号格式不正确", "cell");
+                if (cellcode == "")
+                    return showmsg("验证码不能为空", "cellcode");
+                var pagei = layer.open({
+                    type: 2,
+                    content: '请求中...',
+                    shadeClose: false
+                });
+                var activityid = getUrlParam("id");
+                var pm = {
+                    activityid: activityid,
+                    cell: cell,
+                    cellcode: cellcode,
+                    time: Math.random()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/Login/LoginIn",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    data: pm,
+                    success: function (result) {
+                        layer.close(pagei);
+                        if (result.code == 1) {
+                            displaySuccessMessage(result.msg)
+                        } else {
+                            showmsg(result.msg, result.data);
+                        }
+                    },
+                    error: function (error) {
+                        layer.close(pagei);
+                        showmsg(error.responseText, "cell");
+
+                    }
+                });
+
+            });
+
+            //验证码
+            var count = 0;
+            $('#vali_btn').bind("click", function () {
+                if (count < 0) { count = 0; };
+                if (count == 0) {
+                    var cell = $('#cell').val();
+                    if (cell == null || cell == "" || cell.length != 11) {
+                        showmsg('手机号输入不正确，请重新输入', "cell");
+                        count = 0;
+                    } else {
+                        var pagei = layer.open({
+                            type: 2,
+                            content: '请求中...',
+                            shadeClose: false
+                        });
+                        var pm = {
+                            cell: cell,
+                            time: Math.random()
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: "/Login/SendMessage",
+                            contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                            data: pm,
+                            success: function (result) {
+                                layer.close(pagei);
+                                if (result.code == 1) {
+                                    SuccessMsg(result.msg)
+                                    count = 90;
+                                    change();
+                                } else {
+                                    showmsg(result.msg, "cell");
+                                    count = 0;
+                                }
+                            },
+                            error: function (error) {
+                                layer.close(pagei);
+                                showmsg(error.responseText, "cell");
+
+                            }
+                        });
+                    }
+                }
+
+                function change() {
+                    setTimeout(function () {
+                        var $a = $("#vali_btn")
+                        $a.addClass("dis");
+                        $a.val("" + (count) + "秒后重新获取");
+                        count = count - 1;
+                        if (count > 0) {
+                            change();
+                        } else {
+                            $a.removeClass("dis");
+                            $a.val("获取验证码");
+                        }
+                    }, 1000);
+                }
+                return false;
+
+            });
+
+        });
+        function SuccessMsg(msg) {
+            layer.open({
+                content: msg,
+                style: 'width: auto;',
+                btn: ['确认']
+            });
+        }
+     
+        function showmsg(msg, obj) {
+            var index = layer.open({
+                content: msg
+                , btn: ['确认']
+                , skin: 'footer'
+                , yes: function () {
+                    layer.close(index);
+                    $("#" + obj).focus();
+                }
+            });
+        }
+        function displaySuccessMessage(message) {
+            layer.open({
+                content: message + ',正在跳转页面',
+                style: 'background-color:#8DCE16; width: auto;  color:#fff; border:none;',
+                shadeClose: false
+            });
+            var id = getUrlParam("id");
+            setTimeout(function () {
+                window.location.href = '/Default/index?id=' + id;
+            }, 3000);
+        }
+
+        function checkvalue() {
+            var cell = $("#cell").val();
+            var cellcode = $("#cellcode").val();
+            if (cell != "" && cellcode != "") {
+                $("#login").removeClass("dis");
+                $("#login").attr("disabled", false);
+
+            }
+            else {
+                $("#login").addClass("dis");
+                $("#login").attr("disabled", true);
+            }
+        }
+
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+    </script>
+</head>
+<body>
+    <div style=" height:32px; width:100%; border-bottom: 1px solid #eee;">
+        <div><img src="~/images/51106.gif" style=" height:25px; float:left; " /> </div>
+        <div style="line-height:30px; height:32px; margin-bottom:15px;float:left; margin-left:10px; ">
+            手机号登陆
+        </div>
+    </div>
+
+    <div style=" height:50px; width:100%; border-bottom: 1px solid #eee; margin-bottom:5px;">
+
+    </div>
+    <div style=" height:50px; width:100%; border-bottom: 1px solid #eee;margin-bottom:5px;">
+        <input type="number" required="required" class="iphonetext" id="cell" onkeyup='checkvalue();' onblur='checkvalue();' oninput="if(value.length>11)value=value.slice(0,11)" placeholder="请输入手机号码" />
+        <a class="clear" id="btnclear">X</a>
+    </div>
+    <div style=" height:50px; width:100%; border-bottom: 1px solid #eee;margin-bottom:35px;">
+        <input type="number" onkeyup='checkvalue();' onblur='checkvalue();' oninput="if(value.length>4)value=value.slice(0,4)" class="cellcodetext" id="cellcode" placeholder="请输入验证码" />
+        <input type="button" class="btn" id="vali_btn" value="获取验证码" />
+    </div>
+    <div style=" height:50px; width:100%; margin-bottom:5px; text-align:center;">
+        <input type="button" id="login" disabled="disabled" class="loginbtn dis" value="登 陆" />
+    </div>
+</body>
+</html>

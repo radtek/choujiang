@@ -1,0 +1,190 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>查看活动</title>
+    <link rel="stylesheet" type="text/css" href="@Url.ContentVersioned("~/layui/css/layui.css")" media="all">
+    <script type="text/javascript" src="@Url.ContentVersioned("~/Scripts/jquery-1.10.2.min.js")"></script>
+    <script type="text/javascript" src="@Url.ContentVersioned("~/layui/layui.js")"></script>
+    <script type="text/javascript" src="@Url.ContentVersioned("~/jquery-zclip/jquery.zclip.js")"></script>
+</head>
+<body>
+    <ul class="layui-nav" lay-filter="" style=" margin-bottom:10px;">
+        <li class="layui-nav-item layui-this" id="b1"><a>发布信息</a></li>
+        <li class="layui-nav-item disabled" id="b2"><a>奖品信息</a></li>
+    </ul>
+    <form class="layui-form layui-form-pane">
+        <div class="layui-col-md6" style=" margin-bottom:10px;" id="show1">
+            <div class="layui-card">
+                <div class="layui-card-header" style=" text-align:center;">
+                    链接：<div class="layui-input-inline">
+                        <input type="text" name="url" id="url" style="height:25px; line-height:25px; width:400px; " autocomplete="off" class="layui-input">
+                    </div>
+                    <input class="layui-btn layui-btn-sm" id="copybtn1" type="button" style=" width:100px;height:23px; line-height:23px; " value="复制链接" />
+                </div>
+                <div class="layui-card-body center-block" style=" text-align:center;">
+                    <img id="ImagePic" style=" width:335px;" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6" style=" margin-bottom:10px; display:none;" id="show2">
+
+            <table class="layui-table" lay-size="sm">
+                <colgroup>
+                    <col width="70">
+                    <col width="100">
+                    <col width="150">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>奖项</th>
+                        <th>奖品名称</th>
+                        <th>奖品详情</th>
+                        <th>奖品类型</th>
+                        <th>奖品数量</th>
+                        <th>奖品价值</th>
+                        <th>中奖概率</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl"></tbody>
+            </table>
+
+        </div>
+    </form>
+    <script>
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+
+        layui.use(['form', 'table', 'laydate'], function () {
+            var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+            var form = layui.form;
+            var id = getUrlParam("id");
+            var getList = {};
+            $.ajax({
+                url: "/ActivityManage/GetPrizeSettingList",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    getList = data;
+                }
+            });
+            var UpdateActivityPm = {
+                ActivityID: id
+            };
+            $.ajax({
+                url: "/ActivityManage/SingleActivityInfo",
+                dataType: "json",
+                async: false,
+                data: UpdateActivityPm,
+                success: function (data) {
+                    var tabhtml = "";
+                    for (var i = 0; i < data.data.Activity_PrizeSetting.length; i++) {
+                        tabhtml += " <tr>";
+                        tabhtml += "<td>" + (i + 1) + "</td>";
+                        tabhtml += " <td>";
+                        tabhtml += "<select id=\"ATypes" + i + "\" style='width:100px;' disabled>";
+                        if (data.data.Activity_PrizeSetting[i].Awards == "1")
+                            tabhtml += "<option value=\"1\" selected=\"selected\">特等奖</option>";
+                        else
+                            tabhtml += "<option value=\"1\">特等奖</option>";
+
+                        if (data.data.Activity_PrizeSetting[i].Awards == "2")
+                            tabhtml += "<option value=\"2\" selected=\"selected\">一等奖</option>";
+                        else
+                            tabhtml += "<option value=\"2\">一等奖</option>";
+
+                        if (data.data.Activity_PrizeSetting[i].Awards == "3")
+                            tabhtml += "<option value=\"3\" selected=\"selected\" >二等奖</option>";
+                        else
+                            tabhtml += "<option value=\"3\">二等奖</option>";
+
+                        if (data.data.Activity_PrizeSetting[i].Awards == "4")
+                            tabhtml += "<option value=\"4\" selected=\"selected\">三等奖</option>";
+                        else
+                            tabhtml += "<option value=\"4\">三等奖</option>";
+
+                        tabhtml += "</select>";
+                        tabhtml += "</td>";
+                        tabhtml += "<td>";
+                        tabhtml += "<input type='hidden' id='PrizeID" + i + "' value='" + data.data.Activity_PrizeSetting[i].ID + "'  />";
+                        //
+                        tabhtml += "<select name='PName" + i + "' lay-filter=\"test\" key=\"" + i + "\" disabled >";
+                        tabhtml += "<option value=\"\">请选择</option>";
+                        var PDetails = "";
+                        var PType = "";
+                        var Pworth = "";
+                        for (var j = 0; j < getList.count; j++) {
+                            if (data.data.Activity_PrizeSetting[i].PrizeID == getList.data[j].ID) {
+                                tabhtml += "<option  value=\"" + getList.data[j].ID + "\" selected=\"selected\" >" + getList.data[j].PName + "</option>";
+                                PDetails = getList.data[j].PDetails;
+                                Pworth = getList.data[j].Pworth;
+                                PType = getList.data[j].TypeName;
+                            }
+                            else
+                                tabhtml += "<option  value=\"" + getList.data[j].ID + "\">" + getList.data[j].PName + "</option>";
+                        }
+                        tabhtml += "</select > ";
+                        tabhtml += "</td> ";
+                        tabhtml += "<td id=\"PDetails" + i + "\">" + PDetails + "</td>";
+                        tabhtml += "<td id=\"PType" + i + "\">" + PType + "</td>";
+                        tabhtml += "<td><input type=\"text\" onkeyup='checkvalue(this);' disabled maxlength=\"8\"   value='" + data.data.Activity_PrizeSetting[i].Inventory + "' autocomplete=\"off\" class=\"layui-input\" id=\"Inventory" + i + "\" style=\" width: 57px; \" placeholder=\"\"></td>";
+                        tabhtml += "<td id=\"Pworth" + i + "\">" + Pworth + "</td>";
+                        tabhtml += "<td><div style='width:58px;float:left;'><input disabled type=\"text\" value='" + (data.data.Activity_PrizeSetting[i].Probability * 100) + "' onblur='checkvalue1(this);' onkeyup='checkvalue1(this);' maxlength=\"3\" autocomplete=\"off\" class=\"layui-input\" id=\"Probability" + i + "\" style=\" width: 55px;\" placeholder=\"\"></div><i style='float:left;line-height:38px;'>%</i></td>";
+                    }
+                    $("#tbl").html(tabhtml);
+                }
+            });
+            form.render('select');
+            form.render("select", "selFilter");
+            $("#b1").on("click", function () {
+                $("#show1").show();
+                $("#show2").hide();
+                $("#b2").removeClass("layui-this").addClass("disabled");
+                $("#b1").removeClass("layui-this").addClass("layui-this");
+            });
+
+            $("#b2").on("click", function () {
+                $("#show1").hide();
+                $("#show2").show();
+                $("#b1").removeClass("layui-this").addClass("disabled");
+                $("#b2").removeClass("layui-this").addClass("layui-this");
+            });
+            var pm = {
+                activityID: id
+            };
+            $.ajax({
+                url: "/ActivityManage/GetCodeImage",
+                tyep: "get",
+                dataType: "json",
+                data: pm,
+                async: false,
+                success: function (data) {
+                    $("#url").val(data.msg);
+                    $("#ImagePic").attr("src", "data:image/gif;base64," + data.data);
+                    $('#copybtn1').zclip({
+                        path: '/jquery-zclip/ZeroClipboard.swf',
+                        copy: function () {
+                            return $('#url').val();
+                        },
+                        afterCopy: function () {
+                            layui.layer.alert("复制成功", { icon: 1 })
+                        }
+                    });
+                    $("#zclip-ZeroClipboardMovie_1").offset.top = 10;
+                }
+            });
+        });
+       
+    </script>
+</body>
+</html>

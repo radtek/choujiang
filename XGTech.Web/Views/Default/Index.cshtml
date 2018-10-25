@@ -1,0 +1,158 @@
+﻿@using XGTech.Model.Model
+@model Tbl_Activity
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>@Model.Title</title>
+
+    <link href="@Url.ContentVersioned("~/Turn/css/mui.min.css")" rel="stylesheet">
+    <link href="@Url.ContentVersioned("~/Turn/css/component.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.ContentVersioned("~/Turn/css/award.css")" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="@Url.ContentVersioned("~/Turn/css/animate.min.css")">
+
+
+
+
+
+    <style>
+        .button2 {
+            background-color: #f8ad2d; /* Green */
+            border: none;
+            color: white;
+            padding: 5px 8px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <input type="hidden" name="gamed" id="gamed" value="{{gamed}}" />
+    <input type="hidden" name="gameState" id="gameState" value="{{gameState}}" />
+    <input type="hidden" name="cardCode" id="cardCode" value="{{cardCode}}" />
+    <input type="hidden" name="mId" id="mId" value="{{mId}}" />
+    <input type="hidden" name="AId" id="AId" value="@Model.ID" />
+    <!-------------抽奖页面-------------->
+    <div class="ml-main" id="ml-main">
+        <img class="main_back" id="bgimg" style="display:none;" src="@Model.BGImg">
+        <img class="animated zoomIn img_2_1" src="@Model.BannerImg" style="width: 100%;left: 0;top: 0;height:150px">
+        @*<img class="animated bounceIn img_2_2" src="~/Turn/img/img_2.png">*@
+
+        <div class="kePublic">
+
+            <!--转盘效果开始-->
+            <div style="margin:0 auto">
+                <div class="banner">
+                    <div class="turnplate" style="background-image:url(/Turn/img/turnplate-bg_2.png);background-size:100% 100%;font-size:24px !important;">
+                        <canvas class="item" id="wheelcanvas" width="516" height="516"></canvas>
+                        <img id="tupBtn" class="pointer" src="~/Turn/img/turnplate-pointer_2.png" />
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align:center;margin-top: 30px;">
+
+                <a class="button2" href="@Url.Action("Index","MyPrize")" style="padding:5px 20px 5px 20px;font-size:14px;">我的奖品</a>
+                @*<a class="button2" href="#">邀请好友一起抽奖</a>*@
+            </div>
+            <div style="text-align:center;font-size:14px;color:#feeeee;margin-top:20px;">@ViewBag.CJCountText</div>
+            <!--转盘效果结束-->
+            <div class="clear"></div>
+        </div>
+
+        <img class="bottom_shadow" src="~/Turn/img/bottom_shadow.png">
+        <img class="animated zoomIn kePublic_back" src="~/Turn/img/back1.png">
+
+        <!--------------滚动中奖纪录---------------->
+        <div class="record_line" id="Marquee" style="margin-top:35px;display:none;">
+            <div id="">
+                恭喜  159****3540  的用户抽中  <span id="gift_coupon">200元现金代金券</span>
+            </div>
+            <div id="">
+                恭喜  159****2222  的用户抽中  <span id="gift_coupon">200元现金代金券</span>
+            </div>
+            <div id="">
+                恭喜  159****3333  的用户抽中  <span id="gift_coupon">200元现金代金券</span>
+            </div>
+            <div id="">
+                恭喜  159****4444  的用户抽中  <span id="gift_coupon">200元现金代金券</span>
+            </div>
+            <div id="">
+                恭喜  159****5555 的用户抽中  <span id="gift_coupon">200元现金代金券</span>
+            </div>
+            <div id="">
+                恭喜  159****6666  的用户抽中  <span id="gift_coupon">200元现金代金券</span>
+            </div>
+            <div id="">
+                恭喜  159****7777  的用户抽中  <span id="gift_coupon">200元现金代金券</span>
+            </div>
+            <div id="">
+                恭喜  159****8888  的用户抽中  <span id="gift_coupon">200元现金代金券</span>
+                <div id="">
+                    恭喜  159****9999  的用户抽中  <span id="gift_coupon">200元现金代金券</span>
+                </div>
+                <div id="">
+                    恭喜  159****0000  的用户抽中  <span id="gift_coupon">200元现金代金券</span>
+                </div>
+            </div>
+        </div>
+        <!-------------底部声明-------------->
+        <img class="rule_title" src="~/Turn/img/rule_title.png">
+        <div class="rule_text" style="white-space:pre-line;">
+            @Model.ARule
+        </div>
+    </div>
+
+    <!-------------中奖弹窗页面-------------->
+    <div class="zj-main" id="zj-main">
+        <div class="txzl">
+            <div class="zj_text">
+                @*中奖啦<br>*@@*恭喜获得*@<span id="jiangpin"></span>@*一份*@<br>@*可在我的奖品中查看*@
+            </div>
+            <div class="close_zj">关闭</div>
+        </div>
+    </div>
+
+    <!-------------谢谢参与弹窗-------------->
+    <div class="xxcy-main" id="xxcy-main">
+        <div class="xxcy">
+            <div class="xxcy_text">
+                很遗憾<br>没有抽中礼品
+            </div>
+            <div class="close_xxcy">关闭</div>
+        </div>
+    </div>
+    <script src="@Url.ContentVersioned("~/Turn/js/jquery.min.js")"></script>
+    <script src="@Url.ContentVersioned("~/layer-v3.1.1/layer-v3.1.1/layer/layer.js")"></script>
+    <script type="text/javascript" src="@Url.ContentVersioned("~/Turn/js/mui.min.js")"></script>
+    <script type="text/javascript" src="@Url.ContentVersioned("~/Turn/js/awardRotate.js")"></script>
+    <!--<script type="text/javascript" src="js/main.js"></script>-->
+    <script type="text/javascript" src="@Url.ContentVersioned("~/Turn/js/award.js")"></script>
+
+
+
+    <script type="text/javascript">
+        $(function () {
+            $("img").on("click", function (e) {
+                return false;
+            });
+            document.addEventListener("WeixinJSBridgeReady", function () {
+                WeixinJSBridge.call('hideOptionMenu');
+            });
+
+            $("#ml-main").css("background", "url(" + $("#bgimg")[0].src+")");
+
+        });
+    </script>
+
+</body>
+</html>

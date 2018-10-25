@@ -1,0 +1,116 @@
+﻿@using XGTech.Model.ResponseModel
+@model List<AwardRecordPrizeResponseModel>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>我的奖品</title>
+    <style>
+        body {
+            font-size: 12px;
+        }
+
+        .tab {
+            margin: 25px auto 0 auto;
+        }
+
+        .button1 {
+            background-color: #a8a8a8; /* Green */
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .button2 {
+            background-color: #f8ad2d; /* Green */
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .txt1 {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0c0c0c;
+        }
+
+        .txt2 {
+            font-size: 14px;
+            color: #f94c49;
+        }
+
+        .txt3 {
+            color: #7d7d7d;
+        }
+    </style>
+    <script src="@Url.ContentVersioned("~/Turn/js/jquery.min.js")"></script>
+    <script>
+                //$(document).ready(function () {
+                //    $.ajax({
+                //        type: "POST",
+                //        url: "/MyPrize/GetPrizeList",
+                //        contentType: "application/json;charset=UTF-8",
+                //        data: "",
+                //        success: function (result) {
+
+                //        },
+                //        error: function (error) {
+                //            alert("出错：" + error.responseText);
+                //        }
+                //    });
+                //});
+    </script>
+</head>
+<body style="background:#cccccc;" >
+    <table class="tab">
+
+        @if (Model.Count<= 0)
+        {
+            <tr>
+                <td>暂无任何奖品!</td>
+            </tr>
+        }
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td rowspan="3"><img width="120" height="100" src="@item.PImg" /></td>
+                <td class="txt1">@item.PName</td>
+                <td rowspan="3" width="80" align="center" >
+                    <form>
+                        <input type="hidden" name="ID" value="@item.ID" />
+               
+                    @if (item.Status == 0)
+                    {
+                        <a class="button2" href="@Url.Action("Index","Exchange",new { id=item.ID })">兑 奖</a>
+                    }
+                    else
+                    {
+                        <span class="button1">已兑换</span>
+                    }
+                </form>
+                </td>
+            </tr>
+            <tr>
+                <td class="txt2">@item.PDetails</td>
+            </tr>
+            <tr>
+                <td class="txt3">中奖时间:@item.AddTime</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

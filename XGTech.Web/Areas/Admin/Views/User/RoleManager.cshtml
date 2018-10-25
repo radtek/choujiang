@@ -1,0 +1,535 @@
+﻿
+@{
+    Layout = null;
+    //获取权限组列表
+    //var rolelist = ViewData["rolelist"] as List<XGTech.Model.Model.ViewModel.RoleInfo>;
+    //获取菜单列表
+    //var menulist = ViewData["menulist"] as List<XGTech.Model.ViewModel.User.UserMenu>;
+    //获取权限分组
+    //var usermenugroupslist = ViewData["usermenugroupslist"] as List<XGTech.Model.StarAsset.wz_tbl_base_menu_groups>;
+    //获取有权限的操作员
+    //var usermanulist = ViewData["usermanulist"] as List<XGTech.Model.ViewModel.User.UserMenu>;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>操作员权限管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <!-- load css -->
+    <link rel="stylesheet" type="text/css" href="~/Css/bootstrap.min.css" media="all">
+    <link rel="stylesheet" type="text/css" href="~/Css/font/iconfont.css" media="all">
+    <link href="/Scripts/layui1.0/Css/layui.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/Css/main.css?v1.0.0" media="all">
+    <style type="text/css">
+
+        .menuid {
+            margin-top: 15px;
+        }
+
+        .layui-input-block {
+            margin-left: 25% !important;
+        }
+
+        .setborder {
+            width: 16%;
+            min-height: 380px;
+            margin-left: 3%;
+        }
+
+        .layui-form-switch {
+            margin-top: 0px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid larry-wrapper">
+        <div class="row">
+            <div class="col-xs-3 col-sm-3 col-md-3">
+                <!--操作员列表-->
+                <form action="">
+                    <section class="panel panel-padding" style="height: 90%">
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:90px;">员工信息:</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="empno" placeholder="工号" class="layui-input" />
+                                    <input id="hiddenText" type="text" style="display:none" />
+                                </div>
+                            </div>
+                          
+                            <div class="layui-inline">
+                                <button type="button" id="btnquery" class="layui-btn">查询</button>
+                            </div>
+                        </div>
+                        @*<fieldset class="layui-elem-field panel-padding">
+                            <legend>权限组列表</legend>*@
+
+                        <div class="layui-form-item">
+                            @*@if (HtmlHelperEx.HasFun("JBZL_QXGL_XZJS"))
+                                {*@
+                            <button type="button" id="btnaddrole" class="layui-btn">新增</button>
+                            @*}
+                                @if (HtmlHelperEx.HasFun("JBZL_QXGL_BJJS"))
+                                {*@
+                            <button type="button" id="btneditrole" class="layui-btn">编辑</button>
+                            @*}*@
+                            @*@if (HtmlHelperEx.HasFun("JBZL_QXGL_SCJS"))
+                                {*@
+                            <button type="button" id="btndeleterole" class="layui-btn">删除</button>
+                            @*}*@
+                        </div>
+                        <table id="roletable" url="/Admin/User/RoleList" pageSize="10" pageIndex="1" class="layui-table" lay-even="" lay-skin="row">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center; width:10px" data-align="center" very-type="radio"></th>
+                                    <th field="RoleId" style="display:none"></th>
+                                    <th field="RoleName">权限组名称</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div id="divRole" class="layui-inline" style="display:none">
+                            <label class="layui-form-label">权限组名称:</label>
+                            <div class="layui-input-inline" style="width:200px">
+                                <input type="text" maxlength="20" autocomplete="off" class="layui-input" id="txtxroleName" name="txtxroleName" lay-verify="txtxroleName" />
+                                <input type="hidden" id="hddroleid" style="display:none" />
+                                <input type="button" id="btnsaverole" class="layui-btn" value="保存" />
+                                <input type="button" id="btnclose" class="layui-btn" value="关闭" />
+                            </div>
+                        </div>
+                        @*</fieldset>*@
+                    </section>
+                </form>
+            </div>
+            <div class="col-xs-9 col-sm-9 col-md-9">
+                <!--操作员列表-->
+                <section class="panel panel-padding" style="height: 90%">
+                    <div>
+                        <fieldset class="layui-elem-field panel-padding">
+                            <legend>权限列表</legend>
+                            <div>
+                                <div class="layui-form-item">
+                                    @*@if (HtmlHelperEx.HasFun("JBZL_QXGL_BCQX"))
+                                        {*@
+                                    <input type="button" id="btnsavefun" class="layui-btn  layui-btn-normal" value="保存" />
+                                    @*}*@
+                                    <input type="button" id="btnroleuser" class="layui-btn  layui-btn-normal" value="员工列表" />
+                                    @*@if (HtmlHelperEx.HasFun("JBZL_QXGL_TJYH"))
+                                        {*@
+                                    <input type="button" id="btnadduser" class="layui-btn layui-btn-normal" value="员工添加" />
+                                    @*}*@
+                                </div>
+                            </div>
+                            <div id="menutable">
+                            </div>
+                            <script id="tpl_menutable" type="text/html">
+                                <table class="layui-table">
+                                    <thead>
+                                        <tr>
+                                            <th>模块名称</th>
+                                            <th>权限</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{# layui.each(d.rows,function(index,r){ }}
+                                        <tr>
+                                            <td>{{r.name}}</td>
+                                            <td>
+                                                {{# if (r.pid == 0) {}}
+                                                <button class="layui-btn layui-btn-normal" rootid="{{r.id}}" onclick="parentselectAllFun(this,{{r.id}})">
+                                                    {{# if (r.isAllselect) {}}
+                                                    取消
+                                                    {{# }else{ }}
+                                                    全选
+                                                    {{# } }}
+                                                </button>
+                                                {{# } }}
+                                                {{# layui.each(r.funs,function(i,row){ }}
+                                                {{# if (i == 0) {}}
+                                                <button class="layui-btn layui-btn-normal" pid="{{r.pid}}" onclick="selectAllFun(this,{{r.id}},{{r.pid}})">
+                                                    {{# if (r.isAllselect) {}}
+                                                    取消
+                                                    {{# }else{ }}
+                                                    全选
+                                                    {{# } }}
+                                                </button>
+                                                {{# } }}
+                                                <label><input type="checkbox" name="{{r.id}}" pid="{{r.pid}}" lay-skin="primary" lay-filter="Choose" islook="{{row.isLook}}" value="{{row.fun_id}}" {{row.ischecked ? 'checked="checked"' : ''}}>{{row.fun_name}}</label>
+                                                {{# }); }}
+
+                                            </td>
+                                        </tr>
+                                        {{# }); }}
+                                    </tbody>
+                                </table>
+                            </script>
+                        </fieldset>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/layui1.0/layui.js"></script>
+    <script src="~/Scripts/Common/verytable1.js"></script>
+    <script type="text/javascript">
+        var form, treegrid;
+        var roletable = table.get("roletable");
+        roletable.regCustomerFunc(function () {
+            var radio = roletable.find("tbody input:radio").get(0);
+            radio.checked = true;
+
+            roletable.find('tbody input[type="radio"]').click(function () {
+                var ischecked = $(this).prop("checked");
+                if (ischecked) {
+                    roleid = $(this).parent().next("td").html();
+                    var paras = {};
+                    paras.roleId = roleid;
+                    bindRoleMenuTreeGrid(paras);
+                }
+            });
+        });
+
+        roletable.on("rowclick", function (event, sender, record) {
+            var roleid = $(record[0]).find("td")[1].innerHTML;
+            var paras = {};
+            paras.roleId = roleid;
+            bindRoleMenuTreeGrid(paras);
+        });
+
+        layui.config({
+            base: '/scripts/extend/'
+        }).use(['form', 'layedit', 'laydate', "layer", "laytpl", "treegrid"], function () {
+            form = layui.form;
+            var layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate
+                , laytpl = layui.laytpl;
+            treegrid = layui.treegrid;
+
+            treegrid.config.render = function (viewid, data) {
+                var view = document.getElementById(viewid).innerHTML;
+                return laytpl(view).render(data) || '';
+            };
+
+            var param = {};
+            roletable.load(param, function (data) {
+                var paras = {};
+                if (data.data.length > 0) {
+                    paras.roleId = data.data[0].RoleId;
+                }
+
+                bindRoleMenuTreeGrid(paras);
+            });
+
+
+            $("#btnquery").click(function () {
+                var param = {};
+                param.Keyword = $("#empno").val();
+                roletable.load(param);
+            });
+
+        });
+
+        function bindRoleMenuTreeGrid(paras)
+        {
+            var daoru = layer.load(0, {
+                shade: [0.1, '#676a6c'] //0.1透明度的白色背景
+            });
+
+            $.ajax({
+                url: '@Url.Content("~/Admin/User/GetRoleMenuTreeGrid")',
+                data: paras,
+                type: "post",
+                async: false,
+                success: function (result) {
+                    if (result) {
+                        var tree1 = treegrid.createNew({
+                            elem: 'menutable',
+                            view: 'tpl_menutable',
+                            data: { rows: result },
+                            parentid: 'pid',
+                            singleSelect: true
+                        });
+                        tree1.build();
+                    }
+                    layer.close(daoru);
+                },
+                error: function () {
+                    layer.close(daoru);
+                    layer.msg("系统异常请稍后再试");
+                }
+            });
+        }
+
+        function parentselectAllFun(dom, pid) {
+            var checkboxs = $("#menutable").find('tbody input[type="checkbox"][pid="' + pid + '"]');
+            var html = $(dom).html().trim();
+            var actionname = html == "全选" ? "取消" : "全选";
+            if (actionname == "取消") {
+                checkboxs.each(function () {
+                    $(this).prop('checked', true);
+                });
+            }
+            if (actionname == "全选") {
+                checkboxs.each(function () {
+                    $(this).prop('checked', false);
+                });
+            }
+
+            $(dom).html(actionname);
+            $("#menutable").find('tbody button[pid="' + pid + '"]').html(actionname);
+        }
+
+        function selectAllFun(dom, mid, pid) {
+            var checkbox = $("#menutable").find('tbody input[type="checkbox"][name="' + mid + '"]');
+            checkbox.prop('checked', !checkbox.prop('checked'));
+            //checkboxs.each(function () {
+            //    $(this).prop('checked', !$(this).prop('checked'));
+            //})
+
+            var html = $(dom).html().trim();
+            var actionname = html == "全选" ? "取消" : "全选";
+            $(dom).html(actionname);
+
+            var checkboxtotal = $("#menutable").find('tbody input[type="checkbox"][pid="' + pid + '"]').length;
+            var checkedcheckboxtotal = $("#menutable").find('tbody input[type="checkbox"][pid="' + pid + '"]:checked').length;
+            if (checkboxtotal == checkedcheckboxtotal) {
+                $("#menutable").find('tbody button[rootid="' + pid + '"]').html("取消");
+            }
+            if (checkedcheckboxtotal == 0)
+            {
+                $("#menutable").find('tbody button[rootid="' + pid + '"]').html("全选");
+            }
+        }
+
+        $("#btnaddrole").click(function () {
+            layer.open({
+                type: 1,
+                area: ['340px', '160px'],
+                content: $('#divRole')
+            });
+
+            $("#hddroleid").val('');
+            $("#txtxroleName").val('');
+        });
+
+        $("#btneditrole").click(function () {
+            layer.open({
+                type: 1,
+                area: ['340px', '160px'],
+                content: $('#divRole')
+            });
+
+            var roleid = 0;
+            var rolename = '';
+            $("#roletable").find('tbody input[type="radio"]:checked').each(function () {
+                roleid = $(this).parent().next("td").html();
+                rolename = $(this).parent().next("td").next("td").html();
+            });
+
+            $("#hddroleid").val(roleid);
+            $("#txtxroleName").val(rolename);
+        });
+
+        $("#btnsaverole").click(function () {
+            var roleid = $("#hddroleid").val();
+            var param = {};
+            param.roleName = $("#txtxroleName").val();
+            if (roleid != '') {
+                param.roleId = roleid;
+            }
+
+            if (param.roleName == '') {
+                layer.msg('');
+                return;
+            }
+
+            $.ajax({
+                url: "/Admin/User/SaveRole",
+                data: param,
+                type: "post",
+                success: function (e) {
+                    var obj = eval(e);
+                    if (obj.State == 1) {
+                        layer.msg(e.Msg);
+                        roletable.load({}, function (data) {
+                            var paras = {};
+                            if (data.data.length > 0) {
+                                paras.roleId = data.data[0].RoleId;
+                            }
+
+                            bindRoleMenuTreeGrid(paras);
+                        });
+                        layer.closeAll();
+                    } else {
+                        layer.msg(e.Msg);
+                    }
+                }
+            });
+        });
+
+        $("#btndeleterole").click(function () {
+            var roleid = 0;
+            $("#roletable").find('tbody input[type="radio"]:checked').each(function () {
+                roleid = $(this).parent().next("td").html();
+            });
+
+            if (roleid == 0) {
+                layer.alert("请选择权限组");
+                return;
+            }
+
+            layer.confirm('是否确认删除权限组', {
+                btn: ['确定', '取消']
+            }, function (index, layero) {
+                var param = {};
+                if (roleid != '') {
+                    param.roleId = roleid;
+                }
+
+                $.ajax({
+                    url: "/Admin/User/DeleteRole",
+                    data: param,
+                    type: "post",
+                    success: function (e) {
+                        var obj = eval(e);
+                        if (obj.State == 1) {
+                            layer.msg(e.Msg);
+                            roletable.load({}, function (data) {
+                                var paras = {};
+                                if (data.data.length > 0) {
+                                    paras.roleId = data.data[0].RoleId;
+                                }
+
+                                bindRoleMenuTreeGrid(paras);
+                            });
+                        } else {
+                            layer.msg(e.Msg);
+                        }
+                    }
+                });
+            }, function (index) {
+                layer.closeAll();
+            });
+        });
+
+        $("#btnclose").click(function () {
+            layer.closeAll();
+        });
+
+        $("#btnsavefun").click(function () {
+            var roleid = 0;
+            $("#roletable").find('tbody input[type="radio"]:checked').each(function () {
+                roleid = $(this).parent().next("td").html();
+            });
+
+            if (roleid == 0) {
+                layer.alert("请选择权限组");
+                return;
+            }
+
+            var funids = [];
+            $("#menutable").find('tbody input[type="checkbox"]:checked').each(function () {
+                var menuid = $(this).attr("name");
+                var islook = $(this).attr("islook");
+                var funid = $(this).val();
+                funids.push({ fun_id: funid, menu_id: menuid, islook: islook });
+            });
+
+            $.ajax({
+                url: "/Admin/User/SaveRoleFun",
+                data: { funlist: funids, roleid: roleid },
+                type: "post",
+                success: function (e) {
+                    var obj = eval(e);
+                    if (obj.State == 1) {
+                        layer.msg(e.Msg);
+
+                        var paras = {};
+                        paras.roleId = roleid;
+                        bindRoleMenuTreeGrid(paras);
+                    } else {
+                        layer.msg(e.Msg);
+                    }
+                }
+            });
+        })
+
+        //人员查询
+        $("#btnroleuser").click(function () {
+            var roleid = 0;
+            $("#roletable").find('tbody input[type="radio"]:checked').each(function () {
+                roleid = $(this).parent().next("td").html();
+            });
+
+            if (roleid == 0) {
+                layer.alert("请选择权限组");
+                return;
+            }
+
+            //iframe窗
+            layer.open({
+                type: 2,
+                title: "操作员信息",
+                closeBtn: 1, //不显示关闭按钮
+                shade: [0],
+                area: ['693px', '600px'],
+                offset: 'ct', //右下角弹出
+                maxmin: true, //开启最大化最小化按钮
+                //time: 2000, //2秒后自动关闭
+                anim: 2,
+                content: ['/Admin/User/RoleUser?roleid=' + roleid], //iframe的url，no代表不显示滚动条
+                success: function (obj, index) {
+                    //var iframe = "layui-layer-iframe" + index;
+                    //var v = window[iframe];
+                    //v.$("#export").hide();
+                },
+                end: function () { //此处用于演示
+
+                }
+            });
+        });
+
+        $("#btnadduser").click(function () {
+            var roleid = 0;
+            $("#roletable").find('tbody input[type="radio"]:checked').each(function () {
+                roleid = $(this).parent().next("td").html();
+            });
+
+            if (roleid == 0) {
+                layer.alert("请选择权限组");
+                return;
+            }
+
+            layer.open({
+                type: 2,
+                title: "操作员信息",
+                closeBtn: 1, //不显示关闭按钮
+                shade: [0],
+                area: ['693px', '600px'],
+                offset: 'ct', //右下角弹出
+                maxmin: true, //开启最大化最小化按钮
+                //time: 2000, //2秒后自动关闭
+                anim: 2,
+                content: ['/Admin/User/NoRoleUser?roleid=' + roleid], //iframe的url，no代表不显示滚动条
+                success: function (obj, index) {
+                    var iframe = "layui-layer-iframe" + index;
+                    var v = window[iframe];
+                    v.regCloseFn(function () {
+                        layer.closeAll();
+                    });
+                },
+                end: function () {
+                }
+            });
+        });
+    </script>
+</body>
+</html>

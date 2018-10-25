@@ -1,0 +1,524 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>活动管理</title>
+    <link rel="stylesheet" type="text/css" href="@Url.ContentVersioned("~/layui/css/layui.css")">
+</head>
+<body>
+    <form class="layui-form" action="">
+        <div class="layui-row">
+            <div class="layui-col-md3">
+                <div style=" margin-top:30px;  ">
+                    <div class="layui-form-item" pane>
+                        <label class="layui-form-label">时间类型</label>
+                        <div class="layui-input-block" style="width: 130px;">
+                            <select id="datetype">
+                                <option value="1">创建日期</option>
+                                <option value="2">活动时间</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" pane>
+                        <label class="layui-form-label">开始时间</label>
+                        <div class="layui-input-block" style="width: 130px;">
+                            <input type="text" id="start_time" placeholder="" autocomplete="off" class="layui-input" style="width: 130px;">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" pane>
+                        <label class="layui-form-label">结束时间</label>
+                        <div class="layui-input-block" style="width: 130px;">
+                            <input type="text" id="end_time" placeholder="" autocomplete="off" class="layui-input" style="width: 130px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md8">
+                <div style=" margin-top:30px; ">
+                    <div class="layui-form-item">
+                        <div class="layui-inline" style="margin-right:0px;">
+                            <label class="layui-form-label">活动标题：</label>
+                            <div class="layui-input-inline" style="width: 120px;">
+                                <input type="text" id="title" placeholder="活动标题" autocomplete="off" class="layui-input" style="width: 120px;">
+                            </div>
+                        </div>
+                        <div class="layui-inline" style="margin-right:0px;">
+                            <label class="layui-form-label">活动类型：</label>
+                            <div class="layui-input-inline" style="width: 120px;">
+                                <select id="AType">
+                                    <option value="">全部</option>
+                                    <option value="1">幸运转转乐</option>
+                                    @*<option value="2">幸运开火车</option>*@
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline" style="margin-right:0px;">
+                            <label class="layui-form-label">活动状态：</label>
+                            <div class="layui-input-inline" style="width: 120px;">
+                                <select id="Status">
+                                    <option value="">全部</option>
+                                    <option value="1">未发布</option>
+                                    <option value="2">未开始</option>
+                                    <option value="3">进行中</option>
+                                    <option value="4">已结束</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="  margin-top:60px; ">
+                    <div class="layui-input-block">
+                        <input id="Seach" class="layui-btn" value="检索" type="button" />
+                        <input id="Ex" class="layui-btn layui-btn-primary" value="导出" type="button" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <table class="layui-table" lay-filter="activitytable" id="activitytable"></table>
+    <script type="text/html" id="toolbarBtn">
+        <div class="layui-btn-container " style="margin-left:10px;">
+            <input class="layui-btn layui-btn-sm" lay-event="createActivity" type="button" style=" width:100px;" value="创建活动" />
+            @*<input class="layui-btn layui-btn-sm" type="button" lay-event="fabu" style=" width:60px;" value="发布" />
+            <input class="layui-btn layui-btn-sm" type="button" lay-event="edit" style=" width:60px;" value="编辑" />
+        <input class="layui-btn layui-btn-sm" type="button" lay-event="copy" style=" width:90px;" value="复制重开" />*@
+            <button class="layui-btn layui-btn-sm" lay-event="stopActiviy">停止活动</button>
+        </div>
+    </script>
+    @*<script type="text/html" id="barDemo">*@
+
+    @*<a class="layui-btn layui-btn-xs" lay-event="edit">发布</a>*@
+    @*<a class="layui-btn layui-btn-xs" lay-event="edit">复制重开</a>*@
+    @*<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>*@
+    @*</script>*@
+    <script type="text/javascript" src="@Url.ContentVersioned("~/layui/layui.js")"></script>
+    <script>
+        layui.use(['table', 'laydate'], function () {
+            var table = layui.table;
+            var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start_time' //指定元素
+            });
+            laydate.render({
+                elem: '#end_time' //指定元素
+            });
+
+            TableOnLoad();
+
+            //加载表格
+            function TableOnLoad() {
+                var title = $("#title").val();
+                var datetype = $("#datetype").val();
+                var startTime = $("#start_time").val();
+                var endTime = $("#end_time").val();
+                var AType = $("#AType").val();
+                var Status = $("#Status").val();
+                var pm = {
+                    title: title,
+                    datetype: datetype,
+                    startTime: startTime,
+                    endTime: endTime,
+                    AType: AType,
+                    Status: Status
+                };
+                table.render({
+                    elem: '#activitytable'
+                    , url: '/ActivityManage/GetList'
+                    , where: pm
+                    , title: "活动管理列表"
+                    , toolbar: '#toolbarBtn'
+                    , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    , cols: [[
+                        { type: 'checkbox', fixed: 'left' }
+                        , { type: 'numbers', title: '序号' }
+                        , { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 240 }
+                        , { field: 'AddTime', title: '创建日期' } //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                        , { field: 'Number', title: '活动编号' }
+                        , { field: 'Title', title: '活动标题' }
+                        , { field: 'AType', title: '活动类型', templet: '#AtypeName' }
+                        , { field: 'Pworth', title: '商品价值' }
+                        //, { field: 'classify', title: '奖品价值', align: 'center' } //单元格内容水平居中
+                        , {
+                            field: 'StartTime', title: '开始时间', templet: function (d) {
+                                return d.StartDate.split(' ')[0] + ' ' + d.StartTime;
+                            }
+                        } //单元格内容水平居中
+                        , {
+                            field: 'EntTime', title: '结束时间', templet: function (d) {
+                                return d.EndDate.split(' ')[0] + ' ' + d.EntTime;
+                            }
+                        }
+                        , { field: 'Status', title: '活动状态', templet: '#StatusName' }
+                        //, { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150 }
+                    ]]
+                    , page: true
+                });
+
+            }
+
+            //头工具栏事件
+            table.on('toolbar(activitytable)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'stopActiviy':
+                        var data = checkStatus.data;
+                        if (data.length == 0) {
+                            layer.alert("请选择需要停止的活动", { icon: 0 });
+                        } else {
+                            var Activiyids = "";
+                            var check = 0;
+
+                            for (var i = 0; i < data.length; i++) {
+                                Activiyids += data[i].ID + ",";
+                            }
+                            //for (var i = 0; i < data.length; i++) {
+                            //    if (data[i].Status == 3) {
+                            //        Activiyids += data[i].ID + ",";
+                            //    } else {
+                            //        check++;
+                            //    }
+                            //}
+
+                            //if (check == 0) {
+                            //    if (Activiyids == "") {
+                            //        layer.alert("请选择当前状态为“进行中”的活动", { icon: 0 });
+                            //    } else {
+                            var pm = {
+                                ActivityID: Activiyids
+                            };
+                            //console.log(pm);
+                            $.ajax({
+                                url: "/ActivityManage/StopActivity",
+                                dataType: "json",
+                                async: false,
+                                data: pm,
+                                success: function (data) {
+                                    if (data.code == "1") {
+                                        TableOnLoad();
+                                        layer.alert(data.msg, { icon: 1 });
+                                    }
+                                    if (data.code == "0") {
+                                        layer.alert(data.msg, { icon: 2 });
+                                    }
+                                }
+                            });
+                            //    }
+                            //} else {
+                            //    if (check == 1 && Activiyids == "") {
+                            //        layer.alert("停止失败！请选择当前状态为“进行中”的活动", { icon: 2 });
+                            //    } else {
+                            //        layer.alert("你选择当中有未进行中的活动", { icon: 0 });
+                            //    }
+                        }
+                        //}
+                        break;
+                    case 'fabu':
+                        var data = checkStatus.data;
+                        if (data.length == 0)
+                            return layer.alert("请选择需要发布的活动", { icon: 0 });
+                        if (data.length != 1)
+                            return layer.alert("只能选择一个活动进行发布", { icon: 0 });
+
+                        var indexx = layer.confirm('确定要发布该活动？', {
+                            btn: ['确定', '取消'] //按钮
+                            , icon: 3
+                        }, function () {
+                            layer.close(indexx);
+                            var pm = {
+                                ActivityID: data[0].ID
+                            };
+                            $.ajax({
+                                url: "/ActivityManage/ReleaseActivity",
+                                dataType: "json",
+                                async: false,
+                                data: pm,
+                                success: function (json) {
+                                    if (json.code == "1") {
+                                        TableOnLoad();
+                                        parent.layer.open({
+                                            title: "发布",
+                                            type: 2,
+                                            area: ['400px', "350px"],
+                                            fixed: false, //不固定
+                                            content: '/ActivityManage/CodeImage?id=' + data[0].ID
+                                        });
+                                    }
+                                    if (json.code == "0") {
+                                        layer.alert(data.msg, { icon: 2 });
+                                    }
+                                }
+                            });
+                        }, function () {
+                            layer.close(indexx);
+                        });
+                        break;
+                    case 'edit':
+                        var data = checkStatus.data;
+                        if (data.length == 0)
+                            return layer.alert("请选择需要编辑的活动", { icon: 0 });
+                        if (data.length != 1)
+                            return layer.alert("只能选择一个活动进行编辑", { icon: 0 });
+                        if (data[0].Status == "4")
+                            return layer.alert("已结束的活动不能编辑", { icon: 0 });
+                        parent.layer.open({
+                            title: "编辑活动",
+                            type: 2,
+                            area: ['850px', "750px"],
+                            fixed: false, //不固定
+                            maxmin: true,
+                            content: '/ActivityManage/EditActivity?id=' + data[0].ID
+                            , zIndex: layer.zIndex //重点1
+                            , success: function (layero) {
+                            },
+                            end: function () {
+                                window.location.reload();
+                            }
+                        });
+                        break;
+                    case 'copy':
+                        var data = checkStatus.data;
+                        if (data.length == 0)
+                            return layer.alert("请选择需要复制重开的活动", { icon: 0 });
+                        if (data.length != 1)
+                            return layer.alert("只能选择一个活动进行复制", { icon: 0 });
+                        parent.layer.open({
+                            title: "复制重开",
+                            type: 2,
+                            area: ['850px', "750px"],
+                            fixed: false, //不固定
+                            content: '/ActivityManage/CopyActivity?id=' + data[0].ID
+                            , zIndex: layer.zIndex //重点1
+                            , success: function (layero) {
+                            },
+                            end: function () {
+                                window.location.reload();
+                            }
+                        });
+                        break;
+                    case 'isAll':
+                        layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                        break;
+                    case 'createActivity':
+                        parent.layer.open({
+                            title: "创建活动",
+                            type: 2,
+                            area: ['850px', "750px"],
+                            fixed: false, //不固定
+                            content: '/ActivityManage/CreateActivity'
+                            , zIndex: layer.zIndex //重点1
+                            , success: function (layero) {
+                            },
+                            end: function () {
+                                window.location.reload();
+                            }
+                        });
+                        break;
+
+                };
+            });
+
+            $("#Ex").on("click", function () {
+                var title = $("#title").val();
+                var datetype = $("#datetype").val();
+                var startTime = $("#start_time").val();
+                var endTime = $("#end_time").val();
+                var AType = $("#AType").val();
+                var Status = $("#Status").val();
+                var pm = {
+                    title: title,
+                    datetype: datetype,
+                    startTime: startTime,
+                    endTime: endTime,
+                    AType: AType,
+                    Status: Status
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/ActivityManage/Export",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    data: pm,
+                    success: function (result) {
+                        if (result.code == 0) {
+                            window.location.href = result.url;
+                        } else {
+                            layer.alert("导出失败!", { icon: 2 });
+                        }
+                    },
+                    error: function (error) {
+                        layer.alert("出错：" + error.responseText, { icon: 2 });
+                    }
+                });
+            });
+
+
+
+
+            ////监听表格复选框选择
+            //table.on('checkbox(demo)', function (obj) {
+            //    console.log(obj)
+            //});
+            //监听工具条
+            table.on('tool(activitytable)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'fabu') {
+                    var indexx = layer.confirm('确定要发布该活动？', {
+                        btn: ['确定', '取消'] //按钮
+                        , icon: 3
+                    }, function () {
+                        layer.close(indexx);
+                        var pm = {
+                            ActivityID: data.ID
+                        };
+                        $.ajax({
+                            url: "/ActivityManage/ReleaseActivity",
+                            dataType: "json",
+                            async: false,
+                            data: pm,
+                            success: function (json) {
+                                if (json.code == "1") {
+                                    TableOnLoad();
+                                    parent.layer.open({
+                                        title: "发布",
+                                        type: 2,
+                                        area: ['400px', "350px"],
+                                        fixed: false, //不固定
+                                        content: '/ActivityManage/CodeImage?id=' + data.ID
+                                    });
+                                }
+                                if (json.code == "0") {
+                                    layer.alert(json.msg, { icon: 2 });
+                                }
+                            }
+                        });
+                    }, function () {
+                        layer.close(indexx);
+                    });
+                } else if (obj.event === 'see') {
+                    parent.layer.open({
+                        title: "查看活动",
+                        type: 2,
+                        area: ['850px', "580px"],
+                        fixed: false, //不固定
+                        maxmin: true,
+                        content: '/ActivityManage/ActivityInfo?id=' + data.ID
+
+                    });
+                } else if (obj.event === 'edit') {
+                    if (data.Status == "4")
+                        return layer.alert("已结束的活动不能编辑", { icon: 0 });
+                    parent.layer.open({
+                        title: "编辑活动",
+                        type: 2,
+                        area: ['850px', "750px"],
+                        fixed: false, //不固定
+                        maxmin: true,
+                        content: '/ActivityManage/EditActivity?id=' + data.ID
+                        , zIndex: layer.zIndex //重点1
+                        //, success: function (layero) {
+                        //},
+                        //end: function () {
+                        //    window.location.reload();
+                        //}
+                    });
+                }
+                else if (obj.event === 'copy') {
+                    parent.layer.open({
+                        title: "复制重开",
+                        type: 2,
+                        area: ['850px', "750px"],
+                        fixed: false, //不固定
+                        content: '/ActivityManage/CopyActivity?id=' + data.ID
+                        //, zIndex: layer.zIndex //重点1
+                        //, success: function (layero) {
+                        //},
+                        //end: function () {
+                        //    window.location.reload();
+                        //}
+                    });
+                }
+            });
+
+            //var $ = layui.$, active = {
+            //    getCheckData: function () { //获取选中数据
+            //        var checkStatus = table.checkStatus('idTest')
+            //            , data = checkStatus.data;
+            //        layer.alert(JSON.stringify(data));
+            //    }
+            //    , getCheckLength: function () { //获取选中数目
+            //        var checkStatus = table.checkStatus('idTest')
+            //            , data = checkStatus.data;
+            //        layer.msg('选中了：' + data.length + ' 个');
+            //    }
+            //    , isAll: function () { //验证是否全选
+            //        var checkStatus = table.checkStatus('idTest');
+            //        layer.msg(checkStatus.isAll ? '全选' : '未全选')
+            //    }
+            //};
+
+
+            //$('.demoTable .layui-btn').on('click', function () {
+            //    var type = $(this).data('type');
+            //    active[type] ? active[type].call(this) : '';
+            //});
+
+            $("#Seach").on("click", function () {
+                TableOnLoad();
+            });
+        });
+    </script>
+
+    <script type="text/html" id="AtypeName">
+        {{# if(d.AType==1){ }}
+        幸运转转乐
+        {{# }  }}
+
+        {{# if(d.AType==2){ }}
+        幸运开火车
+        {{# } }}
+    </script>
+
+
+
+    <script type="text/html" id="StatusName">
+        {{# if(d.Status==1){ }}
+        <font style="color:blue;">未发布</font>
+        {{# }  }}
+        {{# if(d.Status==2){ }}
+        <font style="color:orange;">  未开始 </font>
+        {{# } }}
+        {{# if(d.Status==3){ }}
+        <font style="color:green;">进行中</font>
+        {{# } }}
+        {{# if(d.Status==4){ }}
+        <font style="color:red;">
+            已结束
+        </font>
+        {{# } }}
+    </script>
+
+    <script type="text/html" id="barDemo">
+        {{# if(d.Status==1){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="fabu">发布</a>
+        {{# } else {  }}
+        <a class="layui-btn layui-btn-xs" style=" background-color: #999;">发布</a>
+        {{# } }}
+        <a class="layui-btn layui-btn-xs" lay-event="see">查看</a>
+        {{# if(d.Status==4){ }}
+        <a class="layui-btn layui-btn-xs" style=" background-color: #999;">编辑</a>
+        {{# } else {  }}
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        {{# } }}
+        <a class="layui-btn layui-btn-xs" lay-event="copy">复制重开</a>
+    </script>
+</body>
+
+
+</html>
